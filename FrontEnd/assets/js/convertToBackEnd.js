@@ -1,4 +1,5 @@
 // variables and classes
+const bodyElement = document.querySelector('body');
 const postsContainer = document.getElementById("posts-container");
 const addPostModal = document.getElementById("add-post-modal");
 const showAddPostModal = document.getElementById("show-add-post-modal-btn");
@@ -7,11 +8,13 @@ const addPostForm = document.getElementById("add-post-form");
 const postDetailContainer = document.getElementById("post-detail");
 const commentsContainer = document.getElementById("comments-container");
 const addCommentForm = document.getElementById("add-comment-form");
+const addPlsLoginModal =document.getElementById('add-pls-login-modal');
+const logOutBtn = document.getElementById('logout');
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 const AllPostApi = `http://localhost:3000/post`
 const AddPostApi = `http://localhost:3000/post`
-
+const checkAuthApi = `http://localhost:3000/auth/check-auth`
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // const posts = loadPostsFromLocalStorage();
@@ -40,6 +43,21 @@ class Comment {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+const checkAuthorize = async () => {
+    const auth_token = await localStorage.getItem('access-token');
+     const responseApi = await fetch(checkAuthApi, {
+        method: "GET",
+        mode: "cors",
+        cache: "no-cache",
+        credentials: "same-origin",
+        headers: {
+            'Authorization': "Bearer "+ auth_token,
+            "Content-Type": "application/json",
+        },
+    });
+     return responseApi.json();
+}
+
 const getAllPost = (callback) => {
     fetch(AllPostApi)
         .then((response) => {
@@ -74,6 +92,12 @@ const AddPost = (callback, data) => {
 ///////////////////////////////////////////////////////////////////////////////
 
 // we will wrap these event listeners in if statements because the elements won't be present on the post detail page and if we don't check for them the app would crash
+
+logOutBtn.addEventListener("click", () => {
+    localStorage.removeItem('access-token');
+    window.location.href="http://localhost:63342/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html";
+});
+
 if (showAddPostModal) {
     showAddPostModal.addEventListener("click", showModal);
 
@@ -91,10 +115,17 @@ if (closeAddPostModal) {
 
 
 
-function showModal() {
-    addPostModal.style.display = "flex";
-    // prevent the posts page from scrolling when scrolling inside the posts modal
-    document.body.style.overflow = "hidden";
+async function showModal() {
+
+    const result = await checkAuthorize();
+    if (result.code === 401) {
+        alert('Có vẻ như bạn chưa đăng nhập \nVui lòng đăng nhập để có thể sử dụng chức năng này');
+        window.location.href = "http://localhost:63342/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html";
+    } else {
+        addPostModal.style.display = "flex";
+        // prevent the posts page from scrolling when scrolling inside the posts modal
+        document.body.style.overflow = "hidden";
+    }
 }
 
 function closeModal() {
@@ -102,7 +133,7 @@ function closeModal() {
     document.body.style.overflow = "";
 }
 
-const renderPosts = (data) => {
+const renderPosts = async (data) => {
     const post = data.results;
     if (post.length === 0) {
         postsContainer.innerHTML = `
@@ -110,33 +141,36 @@ const renderPosts = (data) => {
         <p>Chưa có truyện nào được đăng tải!!</p>
       </div>
     `;
-    }
-    else {
+    } else {
         post.forEach((post) => {
             const postElement = document.createElement("div");
             postElement.classList.add("post");
 
             postElement.innerHTML = `
-        <div class="post-votes">
-          <button ">
-          </button>
-          <span >
-          </span>
-          <button >
-          👍
-          </button>
-        </div>
-        <div class="post-content">
-          <h2>
-            <a href="post.html?id=${post.id}">
-              ${post.subject}
-            </a>
-          </h2>
-          <p>${post.content}</p>
-        </div>
-      `;
-            postsContainer.appendChild(postElement);
-        });
+                <div class="post-votes">
+                <button ">
+                </button>
+                <span >
+                </span>
+                <button >
+                👍
+                </button>
+                </div>
+                <div class="post-content">
+                <h2>
+                <a href="post.html?id=${post.id}">
+                ${post.subject}
+                 </a>
+                   </h2>
+                   <p>${post.content}</p>
+                </div>
+                `;
+                postsContainer.appendChild(postElement);
+            });
+        }
+    const checkAuth = await checkAuthorize();
+    if (checkAuth.code === 401) {
+        logOutBtn.style.visibility = 'hidden';
     }
 }
 

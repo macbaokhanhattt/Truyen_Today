@@ -82,9 +82,10 @@ const signIn = async () => {
     if (result.code === 400) {
         await alert(`Error: ${result.message} Vui lòng nhập lại!!`);
     }else {
+        console.log('Deo on');
         await saveTokenToLocalStorage(result.tokens.access.token);
-        window.location.href = "../../index.html" ;
         alert('Đăng nhập thành công!!!!!!!');
+        window.location.href = "../../index.html";
     }
 }
 
