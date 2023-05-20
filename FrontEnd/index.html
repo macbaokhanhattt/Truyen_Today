@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Truyện Today</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/modern-normalize/1.1.0/modern-normalize.min.css"
+      integrity="sha512-wpPYUAdjBVSE4KJnH1VR1HeZfpl1ub8YT/NKx4PuQ5NmX2tKuGu6U/JRp5y+Y8XG2tV+wKQpNHVUX03MfMFn9Q=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css"
+      integrity="sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./assets/css/styles.css">
+  </head>
+
+  <body>
+    <header>
+      <a href="./index.html">Truyện Today</a>
+      <small>Nơi chia sẻ các câu chuyện thú vị</small>
+    </header>
+
+    <main>
+      <div class="posts-header">
+        <h1>Truyện mới nhất</h1>
+        <button id="show-add-post-modal-btn">Đăng bài</button>
+      </div>
+      <div id="posts-container">
+        <!-- posts will load here dynamically by JavaScript -->
+      </div>
+      <div id="end-page">
+
+      </div>
+      <button class="logout">Đăng xuất</button>
+    </main>
+
+    <!-- modal for adding a post -->
+    <div id="add-post-modal">
+      <div class="modal-content">
+        <button id="close-modal-btn">
+          <i class="las la-times"></i>
+        </button>
+        <form id="add-post-form">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" required>
+          </div>
+          <div class="form-group">
+            <label for="content">Content</label>
+            <textarea id="content" rows="10" required></textarea>
+          </div>
+          <button type="submit">Add Post</button>
+        </form>
+      </div>
+    </div>
+    <script src="./assets/js/convertToBackEnd.js"></script>
+  </body>
+
+</html>
