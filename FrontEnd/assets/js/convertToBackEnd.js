@@ -49,7 +49,7 @@ const getAllPost = (callback) => {
 }
 
 const AddPost = (callback, data) => {
-    fetch(AllPostApi, {
+    fetch(AddPostApi, {
         method: "POST",
         mode: "cors",
         cache: "no-cache",
@@ -104,7 +104,6 @@ function closeModal() {
 
 const renderPosts = (data) => {
     const post = data.results;
-    console.log(post);
     if (post.length === 0) {
         postsContainer.innerHTML = `
       <div class="no-posts">
@@ -145,10 +144,10 @@ const renderPosts = (data) => {
 
 //Thêm Bài đăng
 if (addPostForm) {
-    addPostForm.addEventListener("submit", addPost);
+    addPostForm.addEventListener("submit", createPost);
 }
 
-function addPost(event) {
+function createPost(event) {
     // we are going to use preventDefault to prevent the default behaviour of a form which is to submit the data to a URL and reload the page, instead we want to execute custom JavaScript code without causing the page to reload
     event.preventDefault();
 
@@ -161,16 +160,19 @@ function addPost(event) {
         // renderPosts(posts);///////////////////////////////////////////////////
         document.getElementById("title").value = "";
         document.getElementById("content").value = "";
+        const accessToken = localStorage.getItem('access-token');
 
         const data ={
             title: post.title,
             content: post.content,
-            user_id: '64688614135295300806a84f',
-            auth_token: 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2NDY4ODYxNDEzNTI5NTMwMDgwNmE4NGYiLCJpYXQiOjE2ODQ1NzY2MjMsImV4cCI6MTY4NDU3ODQyMywidHlwZSI6ImFjY2VzcyJ9.N6SDaDNlsXPW4iO8AF9W2YXMn68aFjkInSf808zkT6I'
+            user_id: '646885f5135295300806a84a',
+            auth_token: "Bearer " + accessToken,
         }
 
+        console.log(data.auth_token);
         AddPost( renderPosts, data);
         closeModal();
+
         window.location.reload();
 
     }
