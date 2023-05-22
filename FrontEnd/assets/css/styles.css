@@ -181,6 +181,9 @@ header small {
   margin-left: 40px;
 }
 
+.page-button {
+  margin-right: 5px; /* Đặt khoảng cách 5px giữa các button */
+}
 
 
 /* modify post style on post detail page */

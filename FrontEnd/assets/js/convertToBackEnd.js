@@ -10,11 +10,12 @@ const commentsContainer = document.getElementById("comments-container");
 const addCommentForm = document.getElementById("add-comment-form");
 const addPlsLoginModal =document.getElementById('add-pls-login-modal');
 const logOutBtn = document.getElementById('logout');
+const endPageElement = document.getElementById('end-page');
 const endPageLoginBtn = document.getElementById('end-page-login');
 const loginAlert = document.getElementById('login-alert');
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-const AllPostApi = `http://localhost:3000/post?sortBy=createdAt:desc`
+const NewPostApi = `http://localhost:3000/post?sortBy=createdAt:desc&limit=5&page=`
 const AddPostApi = `http://localhost:3000/post`
 const checkAuthApi = `http://localhost:3000/auth/check-auth`
 const getUserApi = `http://localhost:3000/users/`
@@ -79,15 +80,13 @@ const checkAuthorize = async () => {
      return responseApi.json();
 }
 
-const getAllPost = (callback) => {
-    fetch(AllPostApi)
-        .then((response) => {
-            return response.json()
-        })
-        .then(callback);
+const getNewsPost = async (page) => {
+    const responseApi = await fetch(NewPostApi +page);
+    return responseApi.json();
+
 }
 
-const AddPost = (callback, data) => {
+const AddPost = (data) => {
     fetch(AddPostApi, {
         method: "POST",
         mode: "cors",
@@ -140,7 +139,6 @@ if (closeAddPostModal) {
 }
 
 
-
 async function showModal() {
 
     const result = await checkAuthorize();
@@ -159,8 +157,63 @@ function closeModal() {
     document.body.style.overflow = "";
 }
 
-const renderPosts = async (data) => {
-    const post = data.results;
+const renderPostsByPage = async (pageNumber) => {
+    // Xóa các thẻ con trong postsContainer trước khi hiển thị bài đăng mới
+    postsContainer.innerHTML = '';
+
+    // Gọi API hoặc thực hiện truy vấn dữ liệu để lấy các bài đăng của trang pageNumber
+    const data = await getNewsPost(pageNumber);
+
+    // Kiểm tra nếu không có bài đăng nào được tìm thấy
+    if (data.results.length === 0) {
+        postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p>Chưa có bài đăng nào!</p>
+      </div>
+    `;
+        return;
+    }
+
+    // Hiển thị các bài đăng của trang pageNumber
+    data.results.forEach((post) => {
+        const postElement = document.createElement('div');
+        postElement.classList.add('post');
+
+        postElement.innerHTML = `<div class="post-votes">
+                <button ">
+                </button>
+                <span >
+                </span>
+                <button >
+                👍
+                </button>
+                </div>
+                <div class="post-content">
+                <h2>
+                <a href="post.html?id=${post.id}">
+                ${post.subject}
+                 </a>
+                   </h2>
+                   <p>Thể loại: ${post.category}</p>
+                   <p>Người đăng: ${post.username}</p>
+                </div>`;
+
+        postsContainer.appendChild(postElement);
+    });
+};
+
+
+const renderPosts = async (pageNumber) => {
+    let page ;
+    if (!pageNumber){
+        page =1;
+    } else {
+        page = pageNumber
+    };
+    const data = await getNewsPost(String(page));
+
+    let post = data.results;
+
     if (post.length === 0) {
         postsContainer.innerHTML = `
       <div class="no-posts">
@@ -189,12 +242,33 @@ const renderPosts = async (data) => {
                  </a>
                    </h2>
                    <p>Thể loại: ${post.category}</p>
-                   <p>Tác giả: ${post.username}</p>
+                   <p>Người đăng: ${post.username}</p>
                 </div>
                 `;
-                postsContainer.appendChild(postElement);
-            });
-        }
+            postsContainer.appendChild(postElement);
+        });
+    }
+
+    for (let i = 0; i < data.totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.classList.add('page-button');
+        pageButton.textContent = i + 1;
+        pageButton.id = `page-button-${i + 1}`;
+        endPageElement.appendChild(pageButton);
+
+
+        // Lấy đối tượng button theo ID
+        const button = document.querySelector(`#page-button-${i + 1}`);
+        let post;
+        // Thêm sự kiện "click" cho button
+        button.addEventListener('click', async function() {
+            // Xử lý sự kiện khi button được nhấp vào
+            // console.log(`Button ${i + 1} clicked!`);
+            renderPostsByPage(i+1);
+        });
+    }
+
+
     const checkAuth = await checkAuthorize();
     if (checkAuth.code === 401) {
         logOutBtn.style.visibility = 'hidden';
@@ -246,7 +320,7 @@ async function createPost(event) {
             username: username,
         }
 
-        AddPost( renderPosts, data);
+        AddPost(data);
         closeModal();
 
         window.location.reload();
@@ -255,7 +329,7 @@ async function createPost(event) {
 }
 
 const start = () => {
-    getAllPost(renderPosts);
+    renderPosts();
 }
 
 start();
