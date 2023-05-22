@@ -180,10 +180,6 @@ const renderPostsByPage = async (pageNumber) => {
         postElement.classList.add('post');
 
         postElement.innerHTML = `<div class="post-votes">
-                <button ">
-                </button>
-                <span >
-                </span>
                 <button >
                 👍
                 </button>
@@ -227,10 +223,6 @@ const renderPosts = async (pageNumber) => {
 
             postElement.innerHTML = `
                 <div class="post-votes">
-                <button ">
-                </button>
-                <span >
-                </span>
                 <button >
                 👍
                 </button>
