@@ -15,8 +15,8 @@ const getPostById = async (id) => {
   return Post.findById(id);
 };
 
-const getPostByCategory = async (email) => {
-  return Post.find({category});
+const getPostByCategory = async (category) => {
+  return Post.find({ category });
 };
 
 const updatePostById = async (postId, updateBody) => {

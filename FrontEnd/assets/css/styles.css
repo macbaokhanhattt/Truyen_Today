@@ -27,6 +27,10 @@ main {
   padding: 0 16px;
 }
 
+#Home-Page {
+  font-size: 30px;
+}
+
 button {
   background-color: var(--main-color);
   background: #573b8a;

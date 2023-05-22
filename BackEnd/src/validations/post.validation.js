@@ -8,6 +8,7 @@ const createPost = {
     image: Joi.string(),
     category: Joi.string().required(),
     user_id: Joi.custom(objectId).required(),
+    username: Joi.string().required(),
   }),
 };
 

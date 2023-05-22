@@ -47,9 +47,12 @@ const verifyEmail = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
-const checkAuth = catchAsync( async  (req, res) => {
+const checkAuth = catchAsync(async (req, res) => {
   res.status(200).send({
     code: 200,
+    data: {
+      user_id: req.user.id,
+    },
   });
 });
 

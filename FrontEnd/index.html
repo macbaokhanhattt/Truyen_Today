@@ -18,8 +18,10 @@
 
   <body>
     <header>
-      <a href="./index.html">Truyện Today</a>
-      <small>Nơi chia sẻ các câu chuyện thú vị</small>
+      <a href="./index.html" id="Home-Page">Truyện Today</a>
+<!--      <small>Nơi chia sẻ các câu chuyện thú vị</small>-->
+      <button class="end-page-login" id="end-page-login">Đăng nhập</button>
+      <small id="login-alert">(Có vẻ như bạn chưa đăng nhập , nhấn nút trên để đăng nhập.)</small>
     </header>
 
     <main>
@@ -46,6 +48,10 @@
           <div class="form-group">
             <label for="title">Tiêu đề</label>
             <input type="text" id="title" required>
+          </div>
+          <div class="form-group">
+            <label for="category">Thể loại</label>
+            <input type="text" id="category" required>
           </div>
           <div class="form-group">
             <label for="content">Nội dung</label>

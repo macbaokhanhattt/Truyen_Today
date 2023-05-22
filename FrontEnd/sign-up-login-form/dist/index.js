@@ -54,7 +54,7 @@ const logIn = async () => {
             // 'Content-Type': 'application/x-www-form-urlencoded',
         },
         redirect: "follow",
-        referrerPolicy: "no-referrer",
+        // referrerPolicy: "no-referrer",
         body: JSON.stringify( {
             "email": emailLoginElement.value,
             "password": passwordLoginElement.value,
@@ -79,13 +79,13 @@ const signUp = async () => {
 
 const signIn = async () => {
     const result = await logIn();
-    if (result.code === 400) {
+    if (result.code === 400 || result.code === 401 ) {
         await alert(`Error: ${result.message} Vui lòng nhập lại!!`);
     }else {
         console.log('Deo on');
         await saveTokenToLocalStorage(result.tokens.access.token);
-        alert('Đăng nhập thành công!!!!!!!');
         window.location.href = "../../index.html";
+        alert('Đăng nhập thành công!!!!!!!');
     }
 }
 

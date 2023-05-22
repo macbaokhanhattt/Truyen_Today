@@ -4,30 +4,39 @@ const validator = require('validator');
 const { toJSON, paginate } = require('./plugins');
 
 // Define post schema
-const postSchema = mongoose.Schema({
-  subject: {
-    type: String,
+const postSchema = mongoose.Schema(
+  {
+    subject: {
+      type: String,
+    },
+    content: {
+      type: String,
+    },
+    image: {
+      type: String,
+    },
+    like_count: {
+      type: Number,
+    },
+    comment_count: {
+      type: Number,
+    },
+    category: {
+      type: String,
+    },
+    user_id: {
+      type: String,
+      required: true,
+    },
+    username: {
+      type: String,
+      required: true,
+    },
   },
-  content: {
-    type: String,
-  },
-  image: {
-    type: String
-  },
-  like_count: {
-    type: Number
-  },
-  comment_count:{
-    type: Number
-  },
-  category: {
-    type: String,
-  },
-  user_id: {
-    type: String,
-    required: true
-  },
-});
+  {
+    timestamps: true,
+  }
+);
 
 // Apply plugins to schema
 postSchema.plugin(toJSON);

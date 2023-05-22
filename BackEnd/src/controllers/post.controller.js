@@ -14,8 +14,8 @@ const createPost = catchAsync(async (req, res) => {
   };
 
   ///Authorize If User Create Post with his Id or not
-  if(req.user.id !== req.body.user_id){
-    throw  new ApiError(400, 'Cannot create post for other user');
+  if (req.user.id !== req.body.user_id){
+    throw new ApiError(400, 'Cannot create post for other user');
   };
 
   ///create Post

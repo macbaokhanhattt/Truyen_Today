@@ -8,19 +8,18 @@ const postDetailContainer = document.getElementById("post-detail");
 const commentsContainer = document.getElementById("comments-container");
 const addCommentForm = document.getElementById("add-comment-form");
 
-const posts = loadPostsFromLocalStorage();
+///////////////////////////////////////////////////////////////////////////////////////////////
 
-class Post {
-  // fix undefined for post.votes by setting the default value to 0
-  constructor(id, title, content, comments, votes = 0) {
-    this.id = id;
-    this.title = title;
-    this.content = content;
-    this.comments = comments || [];
-    this.votes = votes;
-  }
+const PostApi = `http://localhost:3000/post/`
+const AllPostApi = `http://localhost:3000/post`
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+const getPost = async (postId) => {
+  const responseApi = await fetch(PostApi+postId);
+  return responseApi.json();
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////
 class Comment {
   constructor(id, parentId, postId, content, author) {
     this.id = id;
@@ -35,159 +34,7 @@ class Comment {
 ////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Luu post vao local Storage
-function savePostsToLocalStorage() {
-  localStorage.setItem("posts", JSON.stringify(posts));
-}
-
-//Load post tu local storage
-function loadPostsFromLocalStorage() {
-  const storedPosts = localStorage.getItem("posts");
-  return storedPosts ? JSON.parse(storedPosts) : [];
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////
-
-// add post functionality
-// we will wrap these event listeners in if statements because the elements won't be present on the post detail page and if we don't check for them the app would crash
-if (showAddPostModal) {
-  showAddPostModal.addEventListener("click", showModal);
-
-  // close the add post modal if the user clicks outside of it
-  window.addEventListener("click", (event) => {
-    if (event.target === addPostModal) {
-      closeModal();
-    }
-  });
-}
-
-if (closeAddPostModal) {
-  closeAddPostModal.addEventListener("click", closeModal);
-}
-
-
-
-function showModal() {
-  addPostModal.style.display = "flex";
-  // prevent the posts page from scrolling when scrolling inside the posts modal
-  document.body.style.overflow = "hidden";
-}
-
-function closeModal() {
-  addPostModal.style.display = "none";
-  document.body.style.overflow = "";
-}
-
-
-
-
-///////////////////////////////////////////////////////////////////////////////////////////////////
-// now lets add the functionality to add and save a post to localStorage
-if (addPostForm) {
-  addPostForm.addEventListener("submit", addPost);
-}
-
-function addPost(event) {
-  // we are going to use preventDefault to prevent the default behaviour of a form which is to submit the data to a URL and reload the page, instead we want to execute custom JavaScript code without causing the page to reload
-  event.preventDefault();
-
-  const title = document.getElementById("title").value;
-  const content = document.getElementById("content").value;
-
-  if (title && content) {
-    const post = new Post(Date.now(), title, content);
-    // add the post to the beginning of the posts array
-    posts.unshift(post);
-    savePostsToLocalStorage();/////////////////////////////////////////////
-    renderPosts(posts);///////////////////////////////////////////////////
-    document.getElementById("title").value = "";
-    document.getElementById("content").value = "";
-    closeModal();
-  }
-}
-
-// now we need to add functionality to display the posts
-function renderPosts(posts) {
-  postsContainer.innerHTML = "";
-
-  if (posts.length === 0) {
-    postsContainer.innerHTML = `
-      <div class="no-posts">
-        <p>No posts yet!</p>        
-      </div>
-    `;
-  } else {
-    posts.forEach((post) => {
-      const postElement = document.createElement("div");
-      postElement.classList.add("post");
-
-      postElement.innerHTML = `
-        <div class="post-votes">
-          <button ">
-          </button>
-          <span >
-          </span>
-          <button >
-          👍
-          </button>
-        </div>
-        <div class="post-content">
-          <h2>
-            <a href="post.html?id=${post.id}">
-              ${post.title}
-            </a>
-          </h2>
-          <p>${post.content}</p>
-        </div>
-      `;
-
-      postsContainer.appendChild(postElement);
-    });
-  }
-}
-
+////////////////////////////////////////////////////////////////////////////
 // now lets add functionality to be able to vote on posts
 function postVote(id, type) {
   const post = posts.find((post) => post.id === id);
@@ -207,37 +54,28 @@ function setPostVoteColor(postVotes) {
 }
 
 // now lets add the post-detail page
-function getPostFromUrl() {
+
+async function renderPostDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
-  return posts.find((post) => post.id === parseInt(postId));
-}
+  const posts = await getPost(postId);
+  console.log(posts);
 
-function renderPostDetail(post) {
-  if (!post || !postDetailContainer) {
+  if (!posts || !postDetailContainer) {
     return;
   }
 
   postDetailContainer.innerHTML = `
     <div class="post">
       <div class="post-votes">
-        <button onclick="postVote(${post.id}, 'upvote')">
-          <i class="las la-chevron-circle-up"></i>
-        </button>
-        <span id="votes-${post.id}" class="${setPostVoteColor(post.votes)}">
-          ${post.votes}
-        </span>
-        <button onclick="postVote(${post.id}, 'downvote')">
-          <i class="las la-chevron-circle-down"></i>
-        </button>
       </div>
       <div class="post-content">
         <h2>
-          <a href="post.html?id=${post.id}">
-            ${post.title}
+          <a href="post.html?id=${posts.id}">
+            ${posts.subject}
           </a>
         </h2>
-        <p>${post.content}</p>
+        <p>${posts.content}</p>
       </div>
     </div>
   `;
@@ -390,10 +228,5 @@ function handleReplyFormSubmit(event) {
 }
 
 // render the post detail and comments if a post is specified in the URL, otherwise, render all posts
-const postToRender = getPostFromUrl();
-if (postToRender) {
-  renderPostDetail(postToRender);
-  renderComments(postToRender.comments, commentsContainer);
-} else {
-  renderPosts(posts);
-}
+  renderPostDetail();
+
