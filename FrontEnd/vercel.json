@@ -16,10 +16,5 @@
       }
     }
   ],
-  "edge": {
-    "origin": {
-      "control": "off"
-    }
-  },
   "cleanUrls": true
 }
