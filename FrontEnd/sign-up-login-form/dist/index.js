@@ -73,7 +73,7 @@ const signUp = async () => {
         await alert(`Error: ${result.message} Vui lòng nhập lại!!`);
     }else {
         await saveTokenToLocalStorage(result.tokens.access.token, result.user.id);
-        window.location.href = "../../index.html" ;
+        window.location.href = "https://truyen-today.vercel.app/" ;
         alert('Đăng ký thành công!!!!!!!');
     }
 }
@@ -85,7 +85,7 @@ const signIn = async () => {
     }else {
         console.log('Deo on');
         await saveTokenToLocalStorage(result.tokens.access.token, result.user.id);
-        window.location.href = "../../index.html";
+        window.location.href = "https://truyen-today.vercel.app/";
         alert('Đăng nhập thành công!!!!!!!');
     }
 }

@@ -117,7 +117,7 @@ const handleDeletePost = async () => {
   const postId = urlParams.get("id");
   const accessTokens = localStorage.getItem("access-token");
   await deletePost(postId, accessTokens);
-  window.location.href = "/Truyen_Today/FrontEnd/index.html";
+  window.location.href = "https://truyen-today.vercel.app/";
 };
 
 const handleUpdatePost = async () => {

@@ -105,11 +105,11 @@ const AddPost = (data) => {
 logOutBtn.addEventListener("click", () => {
     localStorage.removeItem('access-token');
     localStorage.removeItem('user_id');
-    window.location.href="https://truyen-today-sign-up-log-in.vercel.app/";
+    window.location.href="/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html";
 });
 
 endPageLoginBtn.addEventListener("click", () => {
-    window.location.href="https://truyen-today-sign-up-log-in.vercel.app/";
+    window.location.href="/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html";
 });
 
 if (showAddPostModal) {
@@ -133,7 +133,7 @@ async function showModal() {
     const result = await checkAuthorize();
     if (result.code === 401) {
         alert('Có vẻ như bạn chưa đăng nhập \nVui lòng đăng nhập để có thể sử dụng chức năng này');
-        window.location.href = "https://truyen-today-sign-up-log-in.vercel.app/";
+        window.location.href = "/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html";
     } else {
         addPostModal.style.display = "flex";
         // prevent the posts page from scrolling when scrolling inside the posts modal
@@ -282,7 +282,7 @@ async function createPost(event) {
 
         if (result.code === 401) {
             alert('Hết thời gian\nVui lòng đăng nhập lại để có thể sử dụng chức năng này');
-            window.location.href = "https://truyen-today-sign-up-log-in.vercel.app/";
+            window.location.href = "/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html";
         }
 
         const findUser = await getUser(result.data.user_id) ;
