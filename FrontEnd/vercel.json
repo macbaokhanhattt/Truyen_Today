@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "redirects":{
+  "redirects":[{
     "routes": [{ "src": "/[^.]+", "dest": "/", "status": 200 }]
-  }
+  }]
 }
