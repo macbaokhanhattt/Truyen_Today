@@ -5,7 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5aeec08f-4e47-41cb-89fd-81d666182270" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/sign-up-login-form/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/sign-up-login-form/dist/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/vercel.json" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/vercel.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -84,7 +88,8 @@
       <workItem from="1684805025318" duration="10140000" />
       <workItem from="1684817011794" duration="766000" />
       <workItem from="1684830215992" duration="2710000" />
-      <workItem from="1684921318614" duration="3171000" />
+      <workItem from="1684921318614" duration="3626000" />
+      <workItem from="1684930970405" duration="45000" />
     </task>
     <servers />
   </component>
