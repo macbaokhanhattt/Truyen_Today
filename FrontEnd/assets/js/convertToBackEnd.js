@@ -15,10 +15,10 @@ const endPageLoginBtn = document.getElementById('end-page-login');
 const loginAlert = document.getElementById('login-alert');
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-const NewPostApi = `http://localhost:3000/post?sortBy=createdAt:desc&limit=5&page=`
-const AddPostApi = `http://localhost:3000/post`
-const checkAuthApi = `http://localhost:3000/auth/check-auth`
-const getUserApi = `http://localhost:3000/users/`
+const NewPostApi = `https://truyen-today-api-be.onrender.com/post?sortBy=createdAt:desc&limit=5&page=`
+const AddPostApi = `https://truyen-today-api-be.onrender.com/post`
+const checkAuthApi = `https://truyen-today-api-be.onrender.com/auth/check-auth`
+const getUserApi = `https://truyen-today-api-be.onrender.com/users/`
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // const posts = loadPostsFromLocalStorage();
@@ -32,18 +32,6 @@ class Post {
         this.category = category;
         this.comments = comments || [];
         this.votes = votes;
-    }
-}
-
-class Comment {
-    constructor(id, parentId, postId, content, author) {
-        this.id = id;
-        this.parentId = parentId || null;
-        this.postId = postId;
-        this.content = content;
-        this.author = author;
-        // forgot to add childComments array!
-        this.childComments = [];
     }
 }
 
@@ -116,6 +104,7 @@ const AddPost = (data) => {
 
 logOutBtn.addEventListener("click", () => {
     localStorage.removeItem('access-token');
+    localStorage.removeItem('user_id');
     window.location.href="/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html";
 });
 
@@ -180,9 +169,6 @@ const renderPostsByPage = async (pageNumber) => {
         postElement.classList.add('post');
 
         postElement.innerHTML = `<div class="post-votes">
-                <button >
-                👍
-                </button>
                 </div>
                 <div class="post-content">
                 <h2>
@@ -192,6 +178,7 @@ const renderPostsByPage = async (pageNumber) => {
                    </h2>
                    <p>Thể loại: ${post.category}</p>
                    <p>Người đăng: ${post.username}</p>
+                   <p>Lượt thích:  Comment:</p>
                 </div>`;
 
         postsContainer.appendChild(postElement);
@@ -223,9 +210,6 @@ const renderPosts = async (pageNumber) => {
 
             postElement.innerHTML = `
                 <div class="post-votes">
-                <button >
-                👍
-                </button>
                 </div>
                 <div class="post-content">
                 <h2>
@@ -235,6 +219,7 @@ const renderPosts = async (pageNumber) => {
                    </h2>
                    <p>Thể loại: ${post.category}</p>
                    <p>Người đăng: ${post.username}</p>
+                   <p>Lượt thích:  Comment:</p>
                 </div>
                 `;
             postsContainer.appendChild(postElement);

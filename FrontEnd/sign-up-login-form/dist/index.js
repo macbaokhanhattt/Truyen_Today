@@ -9,12 +9,13 @@ const logInBtnElement = document.getElementById('log-in-btn');
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 
-const signUpApi =`http://localhost:3000/auth/register`;
-const logInApi =`http://localhost:3000/auth/login`;
+const signUpApi =`https://truyen-today-api-be.onrender.com/auth/register`;
+const logInApi =`https://truyen-today-api-be.onrender.com/auth/login`;
 
 ////////////////////////////////////////////////////////////////////////////////////////////
-function saveTokenToLocalStorage(access_token) {
+function saveTokenToLocalStorage(access_token ,userId) {
     localStorage.setItem("access-token", access_token);
+    localStorage.setItem("user_id", userId);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +72,7 @@ const signUp = async () => {
     if (result.code === 400) {
         await alert(`Error: ${result.message} Vui lòng nhập lại!!`);
     }else {
-        await saveTokenToLocalStorage(result.tokens.access.token);
+        await saveTokenToLocalStorage(result.tokens.access.token, result.user.id);
         window.location.href = "../../index.html" ;
         alert('Đăng ký thành công!!!!!!!');
     }
@@ -83,7 +84,7 @@ const signIn = async () => {
         await alert(`Error: ${result.message} Vui lòng nhập lại!!`);
     }else {
         console.log('Deo on');
-        await saveTokenToLocalStorage(result.tokens.access.token);
+        await saveTokenToLocalStorage(result.tokens.access.token, result.user.id);
         window.location.href = "../../index.html";
         alert('Đăng nhập thành công!!!!!!!');
     }

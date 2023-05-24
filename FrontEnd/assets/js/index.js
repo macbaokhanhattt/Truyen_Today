@@ -1,17 +1,21 @@
 // variables and classes
 const postsContainer = document.getElementById("posts-container");
-const addPostModal = document.getElementById("add-post-modal");
+const updatePostModal = document.getElementById("add-post-modal");
 const showAddPostModal = document.getElementById("show-add-post-modal-btn");
-const closeAddPostModal = document.getElementById("close-modal-btn");
-const addPostForm = document.getElementById("add-post-form");
+const closeUpdatePostModal = document.getElementById("close-modal-btn");
+const updatePostForm = document.getElementById("add-post-form");
 const postDetailContainer = document.getElementById("post-detail");
 const commentsContainer = document.getElementById("comments-container");
 const addCommentForm = document.getElementById("add-comment-form");
+const deletePostBtn = document.getElementById("delete-post-btn");
+const updatePostBtn = document.getElementById("update-post-btn");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-const PostApi = `http://localhost:3000/post/`
-const AllPostApi = `http://localhost:3000/post`
+const PostApi = `https://truyen-today-api-be.onrender.com/post/`
+const AllPostApi = `https://truyen-today-api-be.onrender.com/post`
+const DeletePostApi = 'https://truyen-today-api-be.onrender.com/post/'
+const UpdatePostApi = `https://truyen-today-api-be.onrender.com/post/`
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 const getPost = async (postId) => {
@@ -19,22 +23,45 @@ const getPost = async (postId) => {
   return responseApi.json();
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////////
-class Comment {
-  constructor(id, parentId, postId, content, author) {
-    this.id = id;
-    this.parentId = parentId || null;
-    this.postId = postId;
-    this.content = content;
-    this.author = author;
-    // forgot to add childComments array!
-    this.childComments = [];
-  }
+const deletePost = async (postId, auth_token) => {
+  const responseApi = await fetch(DeletePostApi+postId, {
+    method: "DELETE",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      'Authorization': "Bearer "+ auth_token,
+      "Content-Type": "application/json",
+    },
+    })
+  return responseApi.json();
 }
-////////////////////////////////////////////////////////////////////////////
 
+const updatePost = async (postId, data) => {
+  console.log(UpdatePostApi+postId);
+  const responseApi = await fetch(UpdatePostApi+postId,{
+    method: "PUT",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      'Authorization': "Bearer"+ data.auth_token,
+      // "Content-Type": "application/json",s
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify( {
+      "subject": data.title,
+      "category": data.category,
+      "content": data.content,
+    },)
+  });
+  return responseApi.json();
+}
 
-////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////
+
 // now lets add functionality to be able to vote on posts
 function postVote(id, type) {
   const post = posts.find((post) => post.id === id);
@@ -59,8 +86,11 @@ async function renderPostDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const posts = await getPost(postId);
-  console.log(posts);
 
+  if (posts.user_id !== localStorage.getItem("user_id")) {
+    deletePostBtn.style.visibility = "hidden";
+    updatePostBtn.style.visibility = "hidden";
+  }
   if (!posts || !postDetailContainer) {
     return;
   }
@@ -75,16 +105,90 @@ async function renderPostDetail() {
             ${posts.subject}
           </a>
         </h2>
+        <p style ="font-weight: bold">Người đăng: ${posts.username}</p>
         <p>${posts.content}</p>
       </div>
     </div>
   `;
 }
 
+const handleDeletePost = async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  const accessTokens = localStorage.getItem("access-token");
+  await deletePost(postId, accessTokens);
+  window.location.href = "/Truyen_Today/FrontEnd/index.html";
+};
+
+const handleUpdatePost = async () => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  const accessTokens = localStorage.getItem("access-token");
+  const title = document.getElementById("title").value;
+  const content = document.getElementById("content").value;
+  const category = document.getElementById('category').value;
+  console.log(accessTokens);
+  const data = {
+    subject : title,
+    content: content,
+    category: category,
+    auth_key: accessTokens
+  }
+  console.log(data);
+  await updatePost(postId,data);
+  // window.location.reload();
+}
+
 // now lets add commenting functionality
 if (addCommentForm) {
   addCommentForm.addEventListener("submit", handleAddCommentFormSubmit);
 }
+
+if(deletePostBtn) {
+  deletePostBtn.addEventListener("click",handleDeletePost);
+}
+
+if(updatePostBtn) {
+  updatePostBtn.addEventListener("click",showUpddateForm);
+}
+
+if (updatePostForm) {
+  updatePostForm.addEventListener("submit",handleUpdatePost);
+}
+
+if (closeUpdatePostModal) {
+  closeUpdatePostModal.addEventListener("click", closeUpdatePost);
+}
+
+
+async function showUpddateForm(event) {
+  event.preventDefault();
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  const post = await getPost(postId);
+
+  const title = document.getElementById("title").value = post.subject;
+  const content = document.getElementById("content").value= post.content;
+  const category = document.getElementById('category').value= post.category;
+
+  updatePostModal.style.display = "flex";
+  // prevent the posts page from scrolling when scrolling inside the posts modal
+  document.body.style.overflow = "hidden";
+
+  window.addEventListener("click", (event) => {
+    if (event.target === updatePostModal) {
+      closeUpdatePost();
+    }
+  });
+
+}
+
+function closeUpdatePost() {
+  updatePostModal.style.display = "none";
+  document.body.style.overflow = "";
+}
+
 
 function handleAddCommentFormSubmit(event) {
   event.preventDefault();
@@ -99,9 +203,9 @@ function handleAddCommentFormSubmit(event) {
 }
 
 // we need to adjust some of these functions now to support nested comments
-function addComment(parentCommentId, replyContent) {
+function addComment(postId,parentCommentId, replyContent) {
   // get the postId from the currently displayed post
-  const post = getPostFromUrl();
+  const post = getPost(postId);
 
   const newComment = new Comment(
     Date.now(),

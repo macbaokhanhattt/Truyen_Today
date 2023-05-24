@@ -11,5 +11,16 @@
         </introspection-scope>
       </schema-mapping>
     </data-source>
+    <data-source name="@database.cdrhjjc.mongodb.net" uuid="7981fb89-9702-444d-8151-8e8f71d5ae48">
+      <database-info product="Mongo DB" version="6.0.6" jdbc-version="4.2" driver-name="MongoDB JDBC Driver" driver-version="1.18" dbms="MONGO" exact-version="6.0.6" exact-driver-version="1.18" />
+      <case-sensitivity plain-identifiers="mixed" quoted-identifiers="mixed" />
+      <secret-storage>master_key</secret-storage>
+      <user-name>macbaokhanh2311</user-name>
+      <schema-mapping>
+        <introspection-scope>
+          <node kind="schema" negative="1" />
+        </introspection-scope>
+      </schema-mapping>
+    </data-source>
   </component>
 </project>

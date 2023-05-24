@@ -8,15 +8,13 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(validate(postValidation.getPosts),postController.getPosts)
-  .post(auth(),validate(postValidation.createPost),postController.createPost)
+  .get(validate(postValidation.getPosts), postController.getPosts)
+  .post(auth(), validate(postValidation.createPost), postController.createPost);
 
 router
   .route('/:postId')
   .get(validate(postValidation.getPost), postController.getPost)
-  .put(auth(), validate(postValidation.updatePost),postController.updatePost)
-  .delete(auth(), validate(postValidation.deletePost), postController.deletePost)
+  .put(auth(), validate(postValidation.updatePost), postController.updatePost)
+  .delete(auth(), validate(postValidation.deletePost), postController.deletePost);
 
 module.exports = router;
-
-
