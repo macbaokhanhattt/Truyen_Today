@@ -70,7 +70,7 @@ const deletePost = catchAsync(async (req, res) => {
     throw  new ApiError(400, 'Cannot delete post of other user');
   };
 
-  await commentService.deleteCommentByPostId();
+  await commentService.deleteCommentByPostId(req.params.postId);
   await postService.deletePostById(req.params.postId);
   res.status(httpStatus.NO_CONTENT).send();
 });

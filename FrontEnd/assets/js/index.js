@@ -12,57 +12,117 @@ const updatePostBtn = document.getElementById("update-post-btn");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-const PostApi = `https://truyen-today-api-be.onrender.com/post/`
-const AllPostApi = `https://truyen-today-api-be.onrender.com/post`
-const DeletePostApi = 'https://truyen-today-api-be.onrender.com/post/'
-const UpdatePostApi = `https://truyen-today-api-be.onrender.com/post/`
+const PostApi = "http://localhost:3000/post/";
+const AllPostApi = "http://localhost:3000/post";
+const DeletePostApi = "http://localhost:3000/post/";
+const UpdatePostApi = "http://localhost:3000/post/";
+const GetCommentByPostIdApi ="http://localhost:3000/comment/";
+const CreateCommentApi = "http://localhost:3000/comment/";
+const DeleteCommentApi = "http://localhost:3000/comment/";
+const getUserApi = `http://localhost:3000/users/`
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+const getUser = async (userId) => {
+  const getUserByIdApi = getUserApi+userId;
+  const responseApi = await fetch(getUserByIdApi,{
+    method: "GET",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      // 'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+  });
+  return await responseApi.json();
+};
 const getPost = async (postId) => {
-  const responseApi = await fetch(PostApi+postId);
+  const responseApi = await fetch(PostApi + postId);
   return responseApi.json();
-}
+};
 
 const deletePost = async (postId, auth_token) => {
-  const responseApi = await fetch(DeletePostApi+postId, {
+  const responseApi = await fetch(DeletePostApi + postId, {
     method: "DELETE",
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",
     headers: {
-      'Authorization': "Bearer "+ auth_token,
+      Authorization: "Bearer " + auth_token,
       "Content-Type": "application/json",
     },
-    })
+  });
   return responseApi.json();
-}
+};
 
 const updatePost = async (postId, data) => {
-  console.log(UpdatePostApi+postId);
-  const responseApi = await fetch(UpdatePostApi+postId,{
+  const responseApi = await fetch(UpdatePostApi + postId, {
     method: "PUT",
     mode: "cors",
     cache: "no-cache",
     credentials: "same-origin",
     headers: {
-      'Authorization': "Bearer"+ data.auth_token,
-      // "Content-Type": "application/json",s
-      'Content-Type': 'application/x-www-form-urlencoded',
+      Authorization: "Bearer " + data.auth_token,
+      "Content-Type": "application/json",
     },
     redirect: "follow",
     referrerPolicy: "no-referrer",
-    body: JSON.stringify( {
-      "subject": data.title,
-      "category": data.category,
-      "content": data.content,
-    },)
+    body: JSON.stringify({
+      subject: data.title,
+      category: data.category,
+      content: data.content,
+    }),
   });
   return responseApi.json();
-}
+};
+
+const createComment = async (postId, content, auth_token, user_id) => {
+  const responseApi = await fetch(CreateCommentApi, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: "Bearer " + auth_token,
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify({
+      post_id: postId,
+      content: content,
+      user_id: user_id
+    }),
+  });
+  return responseApi.json();
+};
+
+const deleteComment = async (commentId, auth_token) => {
+  const responseApi = await fetch(DeleteCommentApi+commentId, {
+    method: "DELETE",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: "Bearer " + auth_token,
+      "Content-Type": "application/json",
+    },
+  });
+  return responseApi.json();
+};
+
+const getCommentsByPostId = async (postId) => {
+  const responseApi = await fetch(GetCommentByPostIdApi+postId);
+  return responseApi.json();
+};
+
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
-// now lets add functionality to be able to vote on posts
+// now let's add functionality to be able to vote on posts
 function postVote(id, type) {
   const post = posts.find((post) => post.id === id);
   post.votes += type === "upvote" ? 1 : -1;
@@ -80,7 +140,7 @@ function setPostVoteColor(postVotes) {
   return postVotes > 0 ? "positive" : "negative";
 }
 
-// now lets add the post-detail page
+// now let's add the post-detail page
 
 async function renderPostDetail() {
   const urlParams = new URLSearchParams(window.location.search);
@@ -97,80 +157,82 @@ async function renderPostDetail() {
 
   postDetailContainer.innerHTML = `
     <div class="post">
-      <div class="post-votes">
-      </div>
+      <div class="post-votes"></div>
       <div class="post-content">
         <h2>
           <a href="post.html?id=${posts.id}">
             ${posts.subject}
           </a>
         </h2>
-        <p style ="font-weight: bold">Người đăng: ${posts.username}</p>
+        <p style="font-weight: bold">Người đăng: ${posts.username}</p>
         <p>${posts.content}</p>
       </div>
     </div>
   `;
+  renderComments();
 }
 
-const handleDeletePost = async () => {
+const handleDeletePost = async (event) => {
+  event.preventDefault();
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const accessTokens = localStorage.getItem("access-token");
-  await deletePost(postId, accessTokens);
-  window.location.href = "../../index.html";
+  deletePost(postId, accessTokens);
+  alert('Xóa thành công');
+  window.location.assign("/Truyen_Today/FrontEnd/index.html");
 };
 
-const handleUpdatePost = async () => {
+const handleUpdatePost = async (event) => {
+  event.preventDefault();
+
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const accessTokens = localStorage.getItem("access-token");
   const title = document.getElementById("title").value;
   const content = document.getElementById("content").value;
-  const category = document.getElementById('category').value;
-  console.log(accessTokens);
+  const category = document.getElementById("category").value;
   const data = {
-    subject : title,
+    title: title,
     content: content,
     category: category,
-    auth_key: accessTokens
-  }
-  console.log(data);
-  await updatePost(postId,data);
-  // window.location.reload();
-}
+    auth_token: accessTokens,
+  };
+  await updatePost(postId, data);
+  alert('Chỉnh sửa thành công');
+  window.location.reload();
+};
 
-// now lets add commenting functionality
+// now let's add commenting functionality
 if (addCommentForm) {
   addCommentForm.addEventListener("submit", handleAddCommentFormSubmit);
 }
 
-if(deletePostBtn) {
-  deletePostBtn.addEventListener("click",handleDeletePost);
+if (deletePostBtn) {
+  deletePostBtn.addEventListener("click", handleDeletePost);
 }
 
-if(updatePostBtn) {
-  updatePostBtn.addEventListener("click",showUpddateForm);
+if (updatePostBtn) {
+  updatePostBtn.addEventListener("click", showUpdateForm);
 }
 
 if (updatePostForm) {
-  updatePostForm.addEventListener("submit",handleUpdatePost);
+  updatePostForm.addEventListener("submit", handleUpdatePost);
 }
 
 if (closeUpdatePostModal) {
   closeUpdatePostModal.addEventListener("click", closeUpdatePost);
 }
 
-
-async function showUpddateForm(event) {
+async function showUpdateForm(event) {
   event.preventDefault();
 
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const post = await getPost(postId);
 
-  const title = document.getElementById("title").value = post.subject;
-  const content = document.getElementById("content").value= post.content;
-  const category = document.getElementById('category').value= post.category;
+  const title = (document.getElementById("title").value = post.subject);
+  const content = (document.getElementById("content").value = post.content);
+  const category = (document.getElementById("category").value = post.category);
 
   updatePostModal.style.display = "flex";
   // prevent the posts page from scrolling when scrolling inside the posts modal
@@ -181,7 +243,6 @@ async function showUpddateForm(event) {
       closeUpdatePost();
     }
   });
-
 }
 
 function closeUpdatePost() {
@@ -196,40 +257,15 @@ function handleAddCommentFormSubmit(event) {
   const commentTextarea = document.getElementById("comment");
   const commentContent = commentTextarea.value;
 
-  // call the addComment function with a null parentCommentId for top-level comments
-  addComment(null, commentContent);
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  const accessTokens = localStorage.getItem("access-token");
+  const userId = localStorage.getItem("user_id");
+
+  createComment(postId, commentContent, accessTokens, userId);
 
   commentTextarea.value = "";
-}
-
-// we need to adjust some of these functions now to support nested comments
-function addComment(postId,parentCommentId, replyContent) {
-  // get the postId from the currently displayed post
-  const post = getPost(postId);
-
-  const newComment = new Comment(
-    Date.now(),
-    Number(parentCommentId),
-    post.id,
-    replyContent,
-    "WebDevASMR" // hard coded, in a real app with users this would be dynamic
-  );
-
-  // add the comment to the post as a top-level comment or as a child comment if applicable
-  if (!parentCommentId) {
-    post.comments.push(newComment);
-  } else {
-    const parentComment = findCommentById(
-      post.comments,
-      Number(parentCommentId)
-    );
-    if (parentComment) {
-      parentComment.childComments.push(newComment);
-    }
-  }
-
-  savePostsToLocalStorage();
-  renderComments(post.comments, commentsContainer);
+  window.location.reload();
 }
 
 // this is a recursive function to find a comment from its ID, if it is not found and the comment has childComments, the function will recall itself with those childComments. This continues until either the comment is found or there are no comments left.
@@ -246,16 +282,20 @@ function findCommentById(comments, id) {
   }
 }
 
-function renderComments(comments, container, depth = 0) {
-  if (depth === 0) {
+async function renderComments(depth = 0) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  const comments = await getCommentsByPostId(postId);
+  if (comments.length === 0) {
     container.innerHTML = "";
   }
-
-  comments.forEach((comment) => {
+  comments.forEach( async (comment) => {
     // create comment element
-    const commentElement = createCommentElement(comment, depth);
+    const userData = await getUser(comment.user_id);
+    const author = await userData.name;
+    const commentElement = createCommentElement(comment, depth, author);
 
-    container.appendChild(commentElement);
+    commentsContainer.appendChild(commentElement);
 
     // display nested comments with an increased depth
     if (comment.childComments && comment.childComments.length > 0) {
@@ -264,12 +304,12 @@ function renderComments(comments, container, depth = 0) {
   });
 }
 
-function createCommentElement(comment, depth) {
+function createCommentElement(comment, depth, author) {
   const commentElement = document.createElement("div");
   commentElement.className = "comment";
   commentElement.style.marginLeft = `${depth * 20}px`;
   commentElement.innerHTML = `
-    <p class="comment-author">${comment.author}</p>
+    <p class="comment-author">${author}</p>
     <p class="comment-content">${comment.content}</p>
     <button class="comment-reply" data-comment-id="${comment.id}">
       <i class="las la-reply"></i> reply

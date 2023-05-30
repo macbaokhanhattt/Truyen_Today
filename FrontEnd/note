@@ -1,0 +1,29 @@
+const PostApi = `https://truyen-today-api-be.onrender.com/post/`
+const AllPostApi = `https://truyen-today-api-be.onrender.com/post`
+const DeletePostApi = 'https://truyen-today-api-be.onrender.com/post/'
+const UpdatePostApi = `https://truyen-today-api-be.onrender.com/post/`
+
+
+
+
+const NewPostApi = `https://truyen-today-api-be.onrender.com/post?sortBy=createdAt:desc&limit=5&page=`
+const AddPostApi = `https://truyen-today-api-be.onrender.com/post`
+const checkAuthApi = `https://truyen-today-api-be.onrender.com/auth/check-auth`
+const getUserApi = `https://truyen-today-api-be.onrender.com/users/`
+
+
+
+const signUpApi =`https://truyen-today-api-be.onrender.com/auth/register`;
+const logInApi =`https://truyen-today-api-be.onrender.com/auth/login`;
+
+
+
+
+
+
+
+
+
+
+
+../../sign-up-login-form/dist/index.html

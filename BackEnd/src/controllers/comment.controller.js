@@ -26,7 +26,7 @@ const createComment = catchAsync(async (req, res) => {
 });
 
 const getCommentByPostId = catchAsync(async (req, res) => {
-  const result = await commentService.getCommentByPostId(req.query.postId);
+  const result = await commentService.getCommentByPostId(req.params.postId);
   if (!result) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Post not found');
   }

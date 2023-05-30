@@ -1,4 +1,4 @@
-// variables and classes
+// Lấy các phần tử DOM
 const bodyElement = document.querySelector('body');
 const postsContainer = document.getElementById("posts-container");
 const addPostModal = document.getElementById("add-post-modal");
@@ -14,28 +14,14 @@ const endPageElement = document.getElementById('end-page');
 const endPageLoginBtn = document.getElementById('end-page-login');
 const loginAlert = document.getElementById('login-alert');
 
+// Định nghĩa URL API
+const NewPostApi = `http://localhost:3000/post?sortBy=createdAt:desc&limit=5&page=`
+const AddPostApi = `http://localhost:3000/post`
+const checkAuthApi = `http://localhost:3000/auth/check-auth`
+const getUserApi = `http://localhost:3000/users/`
+
 ///////////////////////////////////////////////////////////////////////////////////////////
-const NewPostApi = `https://truyen-today-api-be.onrender.com/post?sortBy=createdAt:desc&limit=5&page=`
-const AddPostApi = `https://truyen-today-api-be.onrender.com/post`
-const checkAuthApi = `https://truyen-today-api-be.onrender.com/auth/check-auth`
-const getUserApi = `https://truyen-today-api-be.onrender.com/users/`
-///////////////////////////////////////////////////////////////////////////////////////////
 
-// const posts = loadPostsFromLocalStorage();
-
-class Post {
-    // fix undefined for post.votes by setting the default value to 0
-    constructor(id, title, content,category,comments, votes = 0) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-        this.category = category;
-        this.comments = comments || [];
-        this.votes = votes;
-    }
-}
-
-///////////////////////////////////////////////////////////////////////////////
 const getUser = async (userId) => {
     const getUserByIdApi = getUserApi+userId;
     const responseApi = await fetch(getUserByIdApi,{
@@ -98,42 +84,12 @@ const AddPost = async (data) => {
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-
-// we will wrap these event listeners in if statements because the elements won't be present on the post detail page and if we don't check for them the app would crash
-
-logOutBtn.addEventListener("click", () => {
-    localStorage.removeItem('access-token');
-    localStorage.removeItem('user_id');
-    window.location.href="../../sign-up-login-form/dist/index.html";
-});
-
-endPageLoginBtn.addEventListener("click", () => {
-    window.location.href="../../sign-up-login-form/dist/index.html";
-});
-
-if (showAddPostModal) {
-    showAddPostModal.addEventListener("click", showModal);
-
-    // close the add post modal if the user clicks outside of it
-    window.addEventListener("click", (event) => {
-        if (event.target === addPostModal) {
-            closeModal();
-        }
-    });
-}
-
-if (closeAddPostModal) {
-    closeAddPostModal.addEventListener("click", closeModal);
-}
-
-
 async function showModal() {
 
     const result = await checkAuthorize();
     if (result.code === 401) {
         alert('Có vẻ như bạn chưa đăng nhập \nVui lòng đăng nhập để có thể sử dụng chức năng này');
-        window.location.href = "../../sign-up-login-form/dist/index.html";
+        window.location.assign('/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html');
     } else {
         addPostModal.style.display = "flex";
         // prevent the posts page from scrolling when scrolling inside the posts modal
@@ -255,13 +211,6 @@ const renderPosts = async (pageNumber) => {
     }
 }
 
-
-
-//Thêm Bài đăng
-if (addPostForm) {
-    addPostForm.addEventListener("submit", createPost);
-}
-
 async function createPost(event) {
     // we are going to use preventDefault to prevent the default behaviour of a form which is to submit the data to a URL and reload the page, instead we want to execute custom JavaScript code without causing the page to reload
     event.preventDefault();
@@ -271,7 +220,6 @@ async function createPost(event) {
     const category = document.getElementById('category').value;
 
     if (title && content) {
-        const post = new Post(Date.now(), title, content, category);
         // add the post to the beginning of the posts array
         // renderPosts(posts);///////////////////////////////////////////////////
         document.getElementById("title").value = "";
@@ -289,9 +237,9 @@ async function createPost(event) {
         const username = await findUser.name;
 
         const data ={
-            title: post.title,
-            content: post.content,
-            category: post.category,
+            title: title,
+            content: content,
+            category: category,
             user_id: result.data.user_id,
             auth_token: "Bearer " + accessToken,
             username: username,
@@ -301,7 +249,6 @@ async function createPost(event) {
         closeModal();
 
         window.location.reload();
-
     }
 }
 
@@ -309,4 +256,43 @@ const start = () => {
     renderPosts();
 }
 
+
+///////////////////////////////////////////////////////////////////////////////
+
+// we will wrap these event listeners in if statements because the elements won't be present on the post detail page and if we don't check for them the app would crash
+
+logOutBtn.addEventListener("click", () => {
+    localStorage.removeItem('access-token');
+    localStorage.removeItem('user_id');
+    window.location.assign('/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html');
+});
+
+endPageLoginBtn.addEventListener("click", () => {
+    window.location.assign('/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html');
+});
+
+if (showAddPostModal) {
+    showAddPostModal.addEventListener("click", showModal);
+
+    // close the add post modal if the user clicks outside of it
+    window.addEventListener("click", (event) => {
+        if (event.target === addPostModal) {
+            closeModal();
+        }
+    });
+}
+
+if (closeAddPostModal) {
+    closeAddPostModal.addEventListener("click", closeModal);
+}
+
+
+//Thêm Bài đăng
+if (addPostForm) {
+    addPostForm.addEventListener("submit", createPost);
+}
+
+
 start();
+
+

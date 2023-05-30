@@ -38,8 +38,8 @@ const deleteCommentById = async (commentId) => {
   return comment;
 };
 
-const deleteCommentByPostId = async (postId) =>{
-  await Comment.remove({postId});
+const deleteCommentByPostId = async (postId) => {
+  await Comment.remove({ post_id: postId });
 };
 
 module.exports = {

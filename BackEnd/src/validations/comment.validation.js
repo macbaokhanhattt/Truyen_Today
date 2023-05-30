@@ -20,9 +20,9 @@ const getComments = {
 };
 
 const getCommentByPostId = {
-  query: Joi.object().keys({
+  params: Joi.object().keys({
     postId: Joi.string().required().custom(objectId),
-  })
+  }),
 };
 
 const getCommentByUserId = {
