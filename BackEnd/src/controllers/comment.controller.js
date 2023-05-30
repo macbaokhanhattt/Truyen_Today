@@ -57,17 +57,16 @@ const updateCommentById = catchAsync(async (req, res) => {
 });
 
 const deleteCommentById = catchAsync(async (req, res) => {
-  ///To check if a Comment exists or not
+  /// To check if a Comment exists or not
   const checkCommentExist = await commentService.getCommentById(req.params.commentId);
-  if(!checkCommentExist){
+  if (!checkCommentExist) {
     throw new ApiError(400, 'Comment does not exist!');
-  };
-  ///Authorize If User Delete Comment of other User
-  if(req.user.id !== checkCommentExist.user_id){
-    throw  new ApiError(400, 'Cannot delete comment of other user');
-  };
-
-
+  }
+  /// Authorize If User Delete Comment of other User
+  if (req.user.id !== checkCommentExist.user_id) {
+    throw new ApiError(400, 'Cannot delete comment of other user');
+  }
+  console.log(req.params.commentId);
   await commentService.deleteCommentById(req.params.commentId);
   res.status(httpStatus.NO_CONTENT).send();
 });

@@ -59,16 +59,16 @@ const updatePost = catchAsync(async (req, res) => {
 });
 
 const deletePost = catchAsync(async (req, res) => {
-  ///To check if a Post exists or not
+  /// To check if a Post exists or not
   const checkPostExist = await postService.getPostById(req.params.postId);
-  if(!checkPostExist){
+  if (!checkPostExist) {
     throw new ApiError(400, 'Post does not exist!');
-  };
+  }
 
-  ///Authorize If User Update Post of other User
-  if(req.user.id !== checkPostExist.user_id){
-    throw  new ApiError(400, 'Cannot delete post of other user');
-  };
+  /// Authorize If User Update Post of other User
+  if (req.user.id !== checkPostExist.user_id) {
+    throw new ApiError(400, 'Cannot delete post of other user');
+  }
 
   await commentService.deleteCommentByPostId(req.params.postId);
   await postService.deletePostById(req.params.postId);

@@ -188,18 +188,34 @@ const renderPosts = async (pageNumber) => {
         pageButton.textContent = i + 1;
         pageButton.id = `page-button-${i + 1}`;
         endPageElement.appendChild(pageButton);
-
+        setActivePageButton(1);
 
         // Lấy đối tượng button theo ID
         const button = document.querySelector(`#page-button-${i + 1}`);
         let post;
+
         // Thêm sự kiện "click" cho button
         button.addEventListener('click', async function() {
             // Xử lý sự kiện khi button được nhấp vào
-            // console.log(`Button ${i + 1} clicked!`);
-            renderPostsByPage(i+1);
+            renderPostsByPage(i + 1);
+            setActivePageButton(i + 1);
         });
     }
+
+    function setActivePageButton(pageNumber) {
+        // Lấy danh sách tất cả các nút page
+        const pageButtons = document.querySelectorAll('.page-button');
+
+        // Xóa lớp active khỏi tất cả các nút page
+        pageButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // Thêm lớp active cho nút page được chọn
+        const activeButton = document.querySelector(`#page-button-${pageNumber}`);
+        activeButton.classList.add('active');
+    }
+
 
 
     const checkAuth = await checkAuthorize();

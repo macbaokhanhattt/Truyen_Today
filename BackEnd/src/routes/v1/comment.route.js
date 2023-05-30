@@ -9,13 +9,12 @@ const router = express.Router();
 router
   .route('/')
   .post(auth(), validate(commentValidation.createComment), commentController.createComment)
-  .get(auth(), validate(commentValidation.getCommentByUserId), commentController.getCommentByUserId)
-  .delete(auth(), validate(commentValidation.deleteCommentByPostId), commentController.deleteCommentByPostId)
+  .get(auth(), validate(commentValidation.getCommentByUserId), commentController.getCommentByUserId);
 
 router
   .route('/:commentId')
   .put(auth(), validate(commentValidation.updateComment), commentController.updateCommentById)
-  .delete(auth(), validate(commentValidation.deleteComment), commentController.deleteCommentById)
+  .delete(auth(), validate(commentValidation.deleteComment), commentController.deleteCommentById);
 
 router.route('/:postId').get(validate(commentValidation.getCommentByPostId), commentController.getCommentByPostId);
 

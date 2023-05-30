@@ -6,9 +6,9 @@ const createComment = async (commentBody) => {
   return Comment.create(commentBody);
 };
 
-const getCommentByPostId = async (filter, options) => {
-  const comment = await Comment.find({post_id : filter} );
-  return comment;
+const getCommentByPostId = async (postId) => {
+  const comments = await Comment.find({ post_id: postId }).sort({ createdAt: -1 });
+  return comments;
 };
 
 const getCommentByUserId = async (userId) => {
@@ -25,7 +25,7 @@ const updateCommentById = async (commentId, updateBody) => {
     throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
   }
   Object.assign(comment, updateBody);
-  await Comment.save();
+  await comment.save();
   return comment;
 };
 
@@ -34,7 +34,7 @@ const deleteCommentById = async (commentId) => {
   if (!comment) {
     throw new ApiError(httpStatus.NOT_FOUND, 'Comment not found');
   }
-  await Comment.remove();
+  await Comment.deleteOne({ _id: commentId });
   return comment;
 };
 

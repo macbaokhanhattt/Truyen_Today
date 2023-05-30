@@ -5,19 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5aeec08f-4e47-41cb-89fd-81d666182270" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0a5e0a07-d721-4951-a9a8-57c93214e978.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0a5e0a07-d721-4951-a9a8-57c93214e978.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/7981fb89-9702-444d-8151-8e8f71d5ae48.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/7981fb89-9702-444d-8151-8e8f71d5ae48.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/config/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/config/config.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/controllers/comment.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/controllers/comment.controller.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/controllers/post.controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/controllers/post.controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/BackEnd/src/models/comment.model.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/models/comment.model.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/routes/v1/comment.route.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/routes/v1/comment.route.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/services/comment.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/services/comment.service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/assets/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/css/styles.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/post.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/sign-up-login-form/dist/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/sign-up-login-form/dist/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +31,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/BackEnd" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -51,7 +50,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;database.data.extractors.current.export.id&quot;: &quot;Comma-separated (CSV)_id&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/Code&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/projects/KMA/Truyen_Today&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -104,7 +103,10 @@
       <workItem from="1684942915424" duration="1474000" />
       <workItem from="1685368648905" duration="8212000" />
       <workItem from="1685378642270" duration="1744000" />
-      <workItem from="1685415503453" duration="2544000" />
+      <workItem from="1685415503453" duration="3151000" />
+      <workItem from="1685420962210" duration="4097000" />
+      <workItem from="1685434533526" duration="751000" />
+      <workItem from="1685452786018" duration="13518000" />
     </task>
     <servers />
   </component>

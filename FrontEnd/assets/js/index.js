@@ -18,6 +18,7 @@ const DeletePostApi = "http://localhost:3000/post/";
 const UpdatePostApi = "http://localhost:3000/post/";
 const GetCommentByPostIdApi ="http://localhost:3000/comment/";
 const CreateCommentApi = "http://localhost:3000/comment/";
+const UpdateCommentApi = "http://localhost:3000/comment/";
 const DeleteCommentApi = "http://localhost:3000/comment/";
 const getUserApi = `http://localhost:3000/users/`
 
@@ -110,8 +111,25 @@ const deleteComment = async (commentId, auth_token) => {
       "Content-Type": "application/json",
     },
   });
-  return responseApi.json();
 };
+
+const updateComment = async (commentId, content, auth_token) => {
+  await fetch(UpdateCommentApi+commentId, {
+    method: "PUT",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: "Bearer " + auth_token,
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify({
+      content: content,
+    }),
+  })
+}
 
 const getCommentsByPostId = async (postId) => {
   const responseApi = await fetch(GetCommentByPostIdApi+postId);
@@ -177,9 +195,13 @@ const handleDeletePost = async (event) => {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const accessTokens = localStorage.getItem("access-token");
-  deletePost(postId, accessTokens);
-  alert('Xóa thành công');
-  window.location.assign("/Truyen_Today/FrontEnd/index.html");
+  const confirmDeletePost = confirm('Bạn có chắc muốn xóa không ???');
+  if (confirmDeletePost){
+    console.log('Chill');
+    deletePost(postId, accessTokens);
+    window.location.assign("/Truyen_Today/FrontEnd/index.html");
+  }
+
 };
 
 const handleUpdatePost = async (event) => {
@@ -268,40 +290,28 @@ function handleAddCommentFormSubmit(event) {
   window.location.reload();
 }
 
-// this is a recursive function to find a comment from its ID, if it is not found and the comment has childComments, the function will recall itself with those childComments. This continues until either the comment is found or there are no comments left.
-function findCommentById(comments, id) {
-  for (const comment of comments) {
-    if (comment.id === id) {
-      return comment;
-    } else if (comment.childComments.length > 0) {
-      const foundComment = findCommentById(comment.childComments, id);
-      if (foundComment) {
-        return foundComment;
-      }
-    }
-  }
-}
 
 async function renderComments(depth = 0) {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const comments = await getCommentsByPostId(postId);
-  if (comments.length === 0) {
-    container.innerHTML = "";
+  if (comments.length === 0 || !comments) {
+    commentsContainer.innerHTML = "";
+  } else {
+    comments.forEach(async (comment) => {
+      // create comment element
+      const userData = await getUser(comment.user_id);
+      const author = await userData.name;
+      const commentElement = createCommentElement(comment, depth, author);
+
+      commentsContainer.appendChild(commentElement);
+
+      // display nested comments with an increased depth
+      if (comment.childComments && comment.childComments.length > 0) {
+        renderComments(comment.childComments, container, depth + 1);
+      }
+    });
   }
-  comments.forEach( async (comment) => {
-    // create comment element
-    const userData = await getUser(comment.user_id);
-    const author = await userData.name;
-    const commentElement = createCommentElement(comment, depth, author);
-
-    commentsContainer.appendChild(commentElement);
-
-    // display nested comments with an increased depth
-    if (comment.childComments && comment.childComments.length > 0) {
-      renderComments(comment.childComments, container, depth + 1);
-    }
-  });
 }
 
 function createCommentElement(comment, depth, author) {
@@ -311,64 +321,82 @@ function createCommentElement(comment, depth, author) {
   commentElement.innerHTML = `
     <p class="comment-author">${author}</p>
     <p class="comment-content">${comment.content}</p>
-    <button class="comment-reply" data-comment-id="${comment.id}">
-      <i class="las la-reply"></i> reply
+    <button class="comment-manage" id="update-comment-button" data-comment-id="${comment.id}">
+      Chỉnh sửa
+    </button>
+    <button class="comment-manage" id="delete-comment-button" data-comment-id="${comment.id}">
+      Xóa
     </button>
   `;
 
-  const replyBtn = commentElement.querySelector(".comment-reply");
-  replyBtn.addEventListener("click", handleCommentReply);
+  const UpdateBtn = commentElement.querySelector(".comment-manage#update-comment-button");
+  UpdateBtn.addEventListener("click", handleUpdateComment);
+  const DeleteBtn = commentElement.querySelector(".comment-manage#delete-comment-button");
+  DeleteBtn.addEventListener("click", handleDeleteComment)
 
   return commentElement;
 }
 
 // now lets add functionality for comment replies!
-function handleCommentReply(event) {
+async function handleUpdateComment(event) {
+  event.preventDefault();
   const button = event.target;
   const commentId = button.getAttribute("data-comment-id");
 
   const commentElement = button.closest(".comment");
-  const replyForm = commentElement.querySelector(".reply-form");
+  const commentForm = commentElement.querySelector(".update-comment-form");
 
-  // if the replyForm is displayed change the button to a cancel button which will remove the comment form when clicked
-  if (!replyForm) {
-    button.innerHTML = `<i class="las la-times"></i> cancel`;
-    displayReplyForm(commentId, commentElement);
+  // if the commentForm is displayed change the button to a cancel button which will remove the comment form when clicked
+  if (!commentForm) {
+    button.innerHTML = `<i class="las la-times" style="pointer-events: none;"></i> Hủy chỉnh sửa`;
+    //////////
+    const commentForm = document.createElement("form");
+    commentForm.className = "update-comment-form";
+    commentForm.innerHTML = `
+    <textarea class="update-comment-textarea" rows="4" required></textarea>
+    <button type="submit">Chỉnh sửa</button>
+  `;
+
+    // set the data-parent-id attribute of the form to the parentCommentId
+    commentForm.addEventListener("submit",  async (event) => {
+      event.preventDefault();
+      const form = event.target;
+      const commentTextarea = form.querySelector(".update-comment-textarea");
+      const commentContent = commentTextarea.value;
+      const accessTokens = localStorage.getItem("access-token");
+
+      // add the new comment with the parentCommentId and commentContent
+      const confirmUpdateComment = confirm('Bạn có chắc muốn thay đổi bình luận này không????');
+      if (confirmUpdateComment) {
+        await updateComment(commentId, commentContent, accessTokens );
+        window.location.reload();
+      }
+
+
+      // clear the textarea and hide the comment form
+      commentTextarea.value = "";
+      form.style.display = "none";
+    } );
+    commentElement.appendChild(commentForm);
+    commentForm.style.display = "flex";
+    //////////
   } else {
-    button.innerHTML = `<i class="las la-reply"></i> reply`;
-    commentElement.removeChild(replyForm);
+    button.innerHTML = `Chỉnh sửa`;
+    commentElement.removeChild(commentForm);
   }
 }
 
-function displayReplyForm(parentCommentId, commentElement) {
-  const replyForm = document.createElement("form");
-  replyForm.className = "reply-form";
-  replyForm.innerHTML = `
-    <textarea class="reply-textarea" rows="4" required></textarea>
-    <button type="submit">Add reply</button>
-  `;
-
-  // set the data-parent-id attribute of the form to the parentCommentId
-  replyForm.setAttribute("data-parent-id", parentCommentId);
-  replyForm.addEventListener("submit", handleReplyFormSubmit);
-  commentElement.appendChild(replyForm);
-  replyForm.style.display = "flex";
-}
-
-function handleReplyFormSubmit(event) {
+async function handleDeleteComment(event) {
   event.preventDefault();
+  const button = event.target;
+  const commentId = button.getAttribute("data-comment-id");
+  const confirmDeleteComment = confirm('Bạn có chắc muốn xóa bình luận này không???');
+  const accessTokens = localStorage.getItem("access-token");
 
-  const form = event.target;
-  const parentCommentId = form.getAttribute("data-parent-id");
-  const replyTextarea = form.querySelector(".reply-textarea");
-  const replyContent = replyTextarea.value;
-
-  // add the new comment with the parentCommentId and replyContent
-  addComment(parentCommentId, replyContent);
-
-  // clear the textarea and hide the reply form
-  replyTextarea.value = "";
-  form.style.display = "none";
+  if(confirmDeleteComment){
+    await deleteComment(commentId, accessTokens);
+    window.location.reload();
+  }
 }
 
 // render the post detail and comments if a post is specified in the URL, otherwise, render all posts
