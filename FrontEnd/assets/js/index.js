@@ -20,9 +20,26 @@ const GetCommentByPostIdApi ="http://localhost:3000/comment/";
 const CreateCommentApi = "http://localhost:3000/comment/";
 const UpdateCommentApi = "http://localhost:3000/comment/";
 const DeleteCommentApi = "http://localhost:3000/comment/";
-const getUserApi = `http://localhost:3000/users/`
+const getUserApi = `http://localhost:3000/users/`;
+const checkAuthApi = `http://localhost:3000/auth/check-auth`;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
+const checkAuthorize = async () => {
+  const auth_token = await localStorage.getItem('access-token');
+  const responseApi = await fetch(checkAuthApi, {
+    method: "GET",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      'Authorization': "Bearer "+ auth_token,
+      "Content-Type": "application/json",
+    },
+  });
+  return responseApi.json();
+}
+
+
 const getUser = async (userId) => {
   const getUserByIdApi = getUserApi+userId;
   const responseApi = await fetch(getUserByIdApi,{
@@ -226,7 +243,17 @@ const handleUpdatePost = async (event) => {
 
 // now let's add commenting functionality
 if (addCommentForm) {
-  addCommentForm.addEventListener("submit", handleAddCommentFormSubmit);
+  addCommentForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const checkAuth = await checkAuthorize();
+    if (checkAuth.code === 401) {
+      alert('Có vẻ như bạn chưa đăng nhập \nVui lòng đăng nhập để có thể sử dụng chức năng này');
+      window.location.assign('/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html');
+    }else {
+      handleAddCommentFormSubmit()
+    }
+
+  })
 }
 
 if (deletePostBtn) {
@@ -276,6 +303,7 @@ function closeUpdatePost() {
 function handleAddCommentFormSubmit(event) {
   event.preventDefault();
 
+
   const commentTextarea = document.getElementById("comment");
   const commentContent = commentTextarea.value;
 
@@ -302,7 +330,15 @@ async function renderComments(depth = 0) {
       // create comment element
       const userData = await getUser(comment.user_id);
       const author = await userData.name;
-      const commentElement = createCommentElement(comment, depth, author);
+      const commentElement = await createCommentElement(comment, depth, author);
+      const UpdateBtn = commentElement.querySelector(".comment-manage#update-comment-button");
+      const DeleteBtn = commentElement.querySelector(".comment-manage#delete-comment-button");
+      const UserId = localStorage.getItem('user_id');
+
+      if (comment.user_id !== UserId) {
+        UpdateBtn.style.display = 'none';
+        DeleteBtn.style.display = 'none';
+      }
 
       commentsContainer.appendChild(commentElement);
 
@@ -314,7 +350,8 @@ async function renderComments(depth = 0) {
   }
 }
 
-function createCommentElement(comment, depth, author) {
+
+async function createCommentElement(comment, depth, author) {
   const commentElement = document.createElement("div");
   commentElement.className = "comment";
   commentElement.style.marginLeft = `${depth * 20}px`;
@@ -332,7 +369,7 @@ function createCommentElement(comment, depth, author) {
   const UpdateBtn = commentElement.querySelector(".comment-manage#update-comment-button");
   UpdateBtn.addEventListener("click", handleUpdateComment);
   const DeleteBtn = commentElement.querySelector(".comment-manage#delete-comment-button");
-  DeleteBtn.addEventListener("click", handleDeleteComment)
+  DeleteBtn.addEventListener("click", handleDeleteComment);
 
   return commentElement;
 }
