@@ -2,7 +2,7 @@ const httpStatus = require('http-status');
 const pick = require('../utils/pick');
 const ApiError = require('../utils/ApiError');
 const catchAsync = require('../utils/catchAsync');
-const { postService, userService, commentService} = require('../services');
+const { postService, userService, commentService, likeService} = require('../services');
 const {getPostById} = require("../services/post.service");
 
 
@@ -75,10 +75,53 @@ const deletePost = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const increaseLike = catchAsync(async (req, res) => {
+  /// check liked => if liked => false
+  const likeStatus = await likeService.getPostLikeStatus(req.params.postId, req.user.id);
+  if (likeStatus.isLike === 1) {
+    throw new ApiError(400, 'This Post Already Liked by this user');
+  }
+  const result = await postService.getPostById(req.params.postId);
+  const updateBody = { like_count: result.like_count + 1 };
+  await postService.updatePostById(req.params.postId, updateBody);
+  await likeService.updateLikeTracking(req.params.postId, req.user.id, { isLike: 1 });
+  res.status(200).send();
+});
+
+const decreaseLike = catchAsync(async (req, res) => {
+  /// check liked => if unliked => false
+  const likeStatus = await likeService.getPostLikeStatus(req.params.postId, req.user.id);
+  if (likeStatus.isLike === 0) {
+    throw new ApiError(400, 'This Post Didnt Liked by this user');
+  }
+  const result = await postService.getPostById(req.params.postId);
+  const updateBody = { like_count: result.like_count - 1 };
+  await postService.updatePostById(req.params.postId, updateBody);
+  await likeService.updateLikeTracking(req.params.postId, req.user.id, { isLike: 0 });
+  res.status(200).send();
+});
+
+const checkLikeStatus = catchAsync(async (req, res) => {
+  const post = await likeService.getPostLikeStatus(req.params.postId, req.user.id);
+  const checkLike = post.isLike;
+  res.send({
+    isLike: checkLike,
+  });
+});
+
+const createLikeTracking = catchAsync(async (req, res) => {
+  const result = await likeService.createLikeTracking(req.params.postId, req.user.id);
+  res.status(200).send();
+});
+
 module.exports = {
   createPost,
   getPosts,
   getPost,
   updatePost,
   deletePost,
+  increaseLike,
+  decreaseLike,
+  checkLikeStatus,
+  createLikeTracking,
 };

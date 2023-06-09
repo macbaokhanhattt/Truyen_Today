@@ -134,7 +134,7 @@ const renderPostsByPage = async (pageNumber) => {
                    </h2>
                    <p>Thể loại: ${post.category}</p>
                    <p>Người đăng: ${post.username}</p>
-                   <p>Lượt thích:  Comment:</p>
+                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
                 </div>`;
 
         postsContainer.appendChild(postElement);
@@ -175,7 +175,7 @@ const renderPosts = async (pageNumber) => {
                    </h2>
                    <p>Thể loại: ${post.category}</p>
                    <p>Người đăng: ${post.username}</p>
-                   <p>Lượt thích:  Comment:</p>
+                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
                 </div>
                 `;
             postsContainer.appendChild(postElement);

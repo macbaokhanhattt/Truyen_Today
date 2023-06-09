@@ -17,9 +17,11 @@ const postSchema = mongoose.Schema(
     },
     like_count: {
       type: Number,
+      default: 0,
     },
     comment_count: {
       type: Number,
+      default: 0,
     },
     category: {
       type: String,

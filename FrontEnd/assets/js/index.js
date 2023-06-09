@@ -9,6 +9,8 @@ const commentsContainer = document.getElementById("comments-container");
 const addCommentForm = document.getElementById("add-comment-form");
 const deletePostBtn = document.getElementById("delete-post-btn");
 const updatePostBtn = document.getElementById("update-post-btn");
+const likePostBtn = document.getElementById("like-post-btn");
+const unlikePostBtn = document.getElementById("unlike-post-btn");
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -22,7 +24,10 @@ const UpdateCommentApi = "http://localhost:3000/comment/";
 const DeleteCommentApi = "http://localhost:3000/comment/";
 const getUserApi = `http://localhost:3000/users/`;
 const checkAuthApi = `http://localhost:3000/auth/check-auth`;
-
+const checkLikedApi = 'http://localhost:3000/post/checklike/';
+const LikeApi = 'http://localhost:3000/post/like/';
+const UnLikeApi = 'http://localhost:3000/post/unlike/';
+const CreateLikeTracking = 'http://localhost:3000/post/createLikeTracking/';
 ////////////////////////////////////////////////////////////////////////////////////////////////
 const checkAuthorize = async () => {
   const auth_token = await localStorage.getItem('access-token');
@@ -153,7 +158,64 @@ const getCommentsByPostId = async (postId) => {
   return responseApi.json();
 };
 
+const checkLike = async (postId) => {
+  const auth_token = await localStorage.getItem('access-token');
+  const responseApi = await fetch(checkLikedApi+postId, {
+    method: "GET",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: "Bearer " + auth_token,
+      "Content-Type": "application/json",
+    },
+  })
+  return responseApi.json();
+}
 
+const likePost = async (postId) => {
+  const auth_token = await localStorage.getItem('access-token');
+  const responseApi = await fetch(LikeApi+postId, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: "Bearer " + auth_token,
+      "Content-Type": "application/json",
+    },
+  })
+  return responseApi;
+};
+
+const unLikePost = async (postId) => {
+  const auth_token = await localStorage.getItem('access-token');
+  const responseApi = await fetch(UnLikeApi+postId, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: "Bearer " + auth_token,
+      "Content-Type": "application/json",
+    },
+  })
+  return responseApi;
+};
+
+const createLikeTracking = async (postId) => {
+  const auth_token = await localStorage.getItem('access-token');
+  return await fetch(CreateLikeTracking + postId, {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: "Bearer " + auth_token,
+      "Content-Type": "application/json",
+    },
+  });
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -181,6 +243,23 @@ async function renderPostDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const posts = await getPost(postId);
+
+  const checkAuth = await checkAuthorize();
+  if (checkAuth.code === 401) {
+    deletePostBtn.style.display = "none";
+    updatePostBtn.style.display = "none";
+    likePostBtn.style.display= "none";
+  }else {
+    const likeTracking = await createLikeTracking(postId);
+  }
+
+
+  const checkLiked = await checkLike(postId);
+  if (checkLiked.isLike === 1) {
+    likePostBtn.style.display= "none";
+  }else{
+    unlikePostBtn.style.display="none";
+  }
 
   if (posts.user_id !== localStorage.getItem("user_id")) {
     deletePostBtn.style.visibility = "hidden";
@@ -241,6 +320,25 @@ const handleUpdatePost = async (event) => {
   window.location.reload();
 };
 
+const handleLikePost = async (event) => {
+  event.preventDefault();
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  await likePost(postId);
+  likePostBtn.style.display = "none";
+  unlikePostBtn.style.display = "block";
+}
+
+const handleUnLikePost = async (event) => {
+  event.preventDefault();
+  const urlParams = new URLSearchParams(window.location.search);
+  const postId = urlParams.get("id");
+  await unLikePost(postId);
+  unlikePostBtn.style.display = "none";
+  likePostBtn.style.display = "block";
+
+}
+
 // now let's add commenting functionality
 if (addCommentForm) {
   addCommentForm.addEventListener("submit", async (event) => {
@@ -272,6 +370,14 @@ if (closeUpdatePostModal) {
   closeUpdatePostModal.addEventListener("click", closeUpdatePost);
 }
 
+if (likePostBtn) {
+  likePostBtn.addEventListener("click", handleLikePost)
+}
+
+if (unlikePostBtn) {
+  unlikePostBtn.addEventListener("click", handleUnLikePost)
+}
+/////////////////////////////////////////////////////////////////
 async function showUpdateForm(event) {
   event.preventDefault();
 
@@ -300,8 +406,7 @@ function closeUpdatePost() {
 }
 
 
-function handleAddCommentFormSubmit(event) {
-  event.preventDefault();
+function handleAddCommentFormSubmit() {
 
 
   const commentTextarea = document.getElementById("comment");
