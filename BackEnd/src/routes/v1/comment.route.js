@@ -19,4 +19,3 @@ router
 router.route('/:postId').get(validate(commentValidation.getCommentByPostId), commentController.getCommentByPostId);
 
 module.exports = router;
-

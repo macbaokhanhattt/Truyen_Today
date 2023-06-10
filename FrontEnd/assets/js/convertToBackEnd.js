@@ -81,9 +81,11 @@ const AddPost = async (data) => {
             "username": data.username,
         },)
     })
-}
+};
 
 
+
+//////////////////////////////////////////////////
 async function showModal() {
 
     const result = await checkAuthorize();

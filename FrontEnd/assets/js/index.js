@@ -28,6 +28,8 @@ const checkLikedApi = 'http://localhost:3000/post/checklike/';
 const LikeApi = 'http://localhost:3000/post/like/';
 const UnLikeApi = 'http://localhost:3000/post/unlike/';
 const CreateLikeTracking = 'http://localhost:3000/post/createLikeTracking/';
+const countCommentApi = `http://localhost:3000/comment/count/`
+
 ////////////////////////////////////////////////////////////////////////////////////////////////
 const checkAuthorize = async () => {
   const auth_token = await localStorage.getItem('access-token');
@@ -214,6 +216,12 @@ const createLikeTracking = async (postId) => {
       Authorization: "Bearer " + auth_token,
       "Content-Type": "application/json",
     },
+  });
+}
+
+const countComment = async (postId) => {
+  return await fetch(countCommentApi+postId, {
+    method: "POST",
   });
 }
 

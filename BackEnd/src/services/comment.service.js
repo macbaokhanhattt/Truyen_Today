@@ -42,6 +42,10 @@ const deleteCommentByPostId = async (postId) => {
   await Comment.remove({ post_id: postId });
 };
 
+const countComment = (postId) => {
+  return Comment.count({ post_id: postId });
+};
+
 module.exports = {
   createComment,
   getCommentById,
@@ -50,4 +54,5 @@ module.exports = {
   updateCommentById,
   deleteCommentById,
   deleteCommentByPostId,
+  countComment,
 };

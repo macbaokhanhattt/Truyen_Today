@@ -23,7 +23,6 @@
       <change beforePath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/post.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +37,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/BackEnd" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -122,7 +121,8 @@
       <workItem from="1686151113546" duration="5806000" />
       <workItem from="1686235932701" duration="4346000" />
       <workItem from="1686321295441" duration="1267000" />
-      <workItem from="1686323702255" duration="5140000" />
+      <workItem from="1686323702255" duration="6249000" />
+      <workItem from="1686382905275" duration="7128000" />
     </task>
     <servers />
   </component>
