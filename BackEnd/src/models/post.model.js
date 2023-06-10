@@ -23,6 +23,10 @@ const postSchema = mongoose.Schema(
       type: Number,
       default: 0,
     },
+    interaction_count: {
+      type: Number,
+      default: 0,
+    },
     category: {
       type: String,
     },

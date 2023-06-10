@@ -82,7 +82,10 @@ const increaseLike = catchAsync(async (req, res) => {
     throw new ApiError(400, 'This Post Already Liked by this user');
   }
   const result = await postService.getPostById(req.params.postId);
-  const updateBody = { like_count: result.like_count + 1 };
+  const updateBody = {
+    like_count: result.like_count + 1,
+    interaction_count: result.interaction_count + 1,
+  };
   await postService.updatePostById(req.params.postId, updateBody);
   await likeService.updateLikeTracking(req.params.postId, req.user.id, { isLike: 1 });
   res.status(200).send();
@@ -95,7 +98,10 @@ const decreaseLike = catchAsync(async (req, res) => {
     throw new ApiError(400, 'This Post Didnt Liked by this user');
   }
   const result = await postService.getPostById(req.params.postId);
-  const updateBody = { like_count: result.like_count - 1 };
+  const updateBody = {
+    like_count: result.like_count - 1,
+    interaction_count: result.interaction_count - 1,
+  };
   await postService.updatePostById(req.params.postId, updateBody);
   await likeService.updateLikeTracking(req.params.postId, req.user.id, { isLike: 0 });
   res.status(200).send();

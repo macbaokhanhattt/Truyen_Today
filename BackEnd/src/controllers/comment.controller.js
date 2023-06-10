@@ -20,11 +20,14 @@ const createComment = catchAsync(async (req, res) => {
   if (req.user.id !== req.body.user_id) {
     throw new ApiError(400, 'Cannot create comment for other user');
   }
+  const post = await postService.getPostById(req.body.post_id);
+  const interactionCount = post.interaction_count;
 
   const comment = await commentService.createComment(req.body);
   const commentCount = await commentService.countComment(req.body.post_id);
   await postService.updatePostById(req.body.post_id, {
     comment_count: commentCount,
+    interaction_count: interactionCount + 1,
   });
   res.status(httpStatus.CREATED).send(comment);
 });
@@ -72,9 +75,13 @@ const deleteCommentById = catchAsync(async (req, res) => {
   }
   await commentService.deleteCommentById(req.params.commentId);
 
+  const post = await postService.getPostById(checkCommentExist.post_id);
+  const interactionCount = post.interaction_count;
+
   const commentCount = await commentService.countComment(checkCommentExist.post_id);
   await postService.updatePostById(checkCommentExist.post_id, {
     comment_count: commentCount,
+    interaction_count: interactionCount - 1,
   });
   res.status(httpStatus.NO_CONTENT).send();
 });
