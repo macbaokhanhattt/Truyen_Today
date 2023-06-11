@@ -12,12 +12,12 @@ const addPlsLoginModal =document.getElementById('add-pls-login-modal');
 const logOutBtn = document.getElementById('logout');
 const endPageElement = document.getElementById('end-page');
 const endPageLoginBtn = document.getElementById('end-page-login');
-const loginAlert = document.getElementById('login-alert');
 const newsBtn = document.getElementById('news-btn');
 const hotNewsBtn = document.getElementById('hot-btn');
 const searchInput = document.getElementById('search-input');
 const searchBtn = document.getElementById('search-button');
 const searchForm = document.getElementById('search-form');
+const personalPageBtn = document.getElementById('personal-page-btn');
 
 // Định nghĩa URL API
 const NewPostApi = `http://localhost:3000/post?sortBy=createdAt:desc&limit=5&page=`
@@ -222,7 +222,7 @@ const renderFoundedPostsByPage = async (keyword ,pageNumber) => {
     }
     postsContainer.innerHTML = `
       <div class="no-posts">
-        <p style="font-weight: bold; font-size: larger;">Kết quả tìm kiếm:</p> 
+        <p style="font-weight: bold; font-size: larger;">Kết quả tìm kiếm: </p> 
       </div>
     `;
     // Hiển thị các bài đăng của trang pageNumber
@@ -323,14 +323,15 @@ const renderPosts = async (pageNumber) => {
         activeButton.classList.add('active');
     }
 
-
-
     const checkAuth = await checkAuthorize();
+
     if (checkAuth.code === 401) {
+        personalPageBtn.style.display = 'none';
         logOutBtn.style.display = 'none';
     }else {
+        const user = await getUser(checkAuth.data.user_id);
+        personalPageBtn.innerHTML=`You: `+ user.name;
         endPageLoginBtn.style.display = 'none';
-        loginAlert.style.display= 'none';
     }
 }
 
@@ -419,7 +420,6 @@ const renderHotPosts = async () => {
         logOutBtn.style.visibility = 'hidden';
     }else {
         endPageLoginBtn.style.visibility = 'hidden';
-        loginAlert.style.visibility= 'hidden';
     }
 }
 //Đây
@@ -438,8 +438,8 @@ const renderPostsFounded = async () => {
         console.log('hehe')
         postsContainer.innerHTML = `
       <div class="no-posts">
-        <p>Kết quả tìm kiếm:</p>
-        <p>Không có truyện nào trùng với từ khóa của bạn !!! Hãy thử lại.  </p>
+        <p>Kết quả tìm kiếm: </p>
+        <p> Không có truyện nào trùng với từ khóa của bạn !!! Hãy thử lại.  </p>
       </div>
     `;
     } else {
@@ -511,7 +511,6 @@ const renderPostsFounded = async () => {
         logOutBtn.style.display = 'none';
     }else {
         endPageLoginBtn.style.display = 'none';
-        loginAlert.style.display= 'none';
     }
 }
 

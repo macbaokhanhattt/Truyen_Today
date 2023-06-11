@@ -28,7 +28,8 @@ const checkLikedApi = 'http://localhost:3000/post/checklike/';
 const LikeApi = 'http://localhost:3000/post/like/';
 const UnLikeApi = 'http://localhost:3000/post/unlike/';
 const CreateLikeTracking = 'http://localhost:3000/post/createLikeTracking/';
-const countCommentApi = `http://localhost:3000/comment/count/`
+const countCommentApi = `http://localhost:3000/comment/count/`;
+const UpdatePostViewsApi = "http://localhost:3000/post/views-count/";
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 const checkAuthorize = async () => {
@@ -98,6 +99,26 @@ const updatePost = async (postId, data) => {
       subject: data.title,
       category: data.category,
       content: data.content,
+      views_count: data.views_count,
+    }),
+  });
+  return responseApi.json();
+};
+
+const updatePostViews = async (postId, data) => {
+  const responseApi = await fetch(UpdatePostViewsApi + postId, {
+    method: "PUT",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      Authorization: "Bearer " + data.auth_token,
+      "Content-Type": "application/json",
+    },
+    redirect: "follow",
+    referrerPolicy: "no-referrer",
+    body: JSON.stringify({
+      views_count: data.views_count,
     }),
   });
   return responseApi.json();
@@ -251,6 +272,9 @@ async function renderPostDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const posts = await getPost(postId);
+  let views = {views_count:posts.views_count +1}
+  console.log(posts.views_count);
+  await updatePostViews(postId, views);
 
   const checkAuth = await checkAuthorize();
   if (checkAuth.code === 401) {

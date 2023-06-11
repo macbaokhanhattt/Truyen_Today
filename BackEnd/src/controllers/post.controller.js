@@ -61,6 +61,16 @@ const updatePost = catchAsync(async (req, res) => {
   res.send(post);
 });
 
+const updatePostViews = catchAsync(async (req, res) => {
+  const checkPostExist = await postService.getPostById(req.params.postId);
+  if (!checkPostExist) {
+    throw new ApiError(400, 'Post does not exist!');
+  }
+
+  const post = await postService.updatePostById(req.params.postId, req.body);
+  res.send(post);
+});
+
 const deletePost = catchAsync(async (req, res) => {
   /// To check if a Post exists or not
   const checkPostExist = await postService.getPostById(req.params.postId);
@@ -130,6 +140,7 @@ module.exports = {
   getPosts,
   getPost,
   updatePost,
+  updatePostViews,
   deletePost,
   increaseLike,
   decreaseLike,

@@ -37,6 +37,7 @@ main {
 button {
   background-color: var(--main-color);
   background: #573b8a;
+  white-space: nowrap;
   padding: 8px 12px;
   border-radius: 8px;
   border: 0;
@@ -49,7 +50,7 @@ button {
 }
 
 button:hover {
-  background-color: var(--main-color-hover);
+  background-color: #7a62a4;
 }
 
 a {
@@ -84,6 +85,10 @@ header {
 header small {
   font-size: var(--font-small);
   font-style: italic;
+}
+
+.posts-header {
+  margin-bottom: 10px;
 }
 
 /* styling for posts */
@@ -421,7 +426,6 @@ header small {
 }
 
 #hot-btn {
-  margin-right: 500px;
 }
 
 #news-btn:hover,
@@ -432,8 +436,8 @@ header small {
 #search-form {
   display: flex;
   align-items: center;
-  margin-left: 600px;
-
+  /*margin-left: 600px;*/
+  margin: auto;
 }
 
 #search-input {
@@ -456,4 +460,23 @@ header small {
 #search-button:hover {
   background-color: #7a62a4;
 }
+
+#trends-btn {
+  margin-right: 5px;
+}
+
+#show-add-post-modal-btn {
+  margin-right: 5px;
+}
+
+#trends-btn:hover {
+  background-color: #7a62a4;
+}
+
+#personal-page-btn:active {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+
+
 

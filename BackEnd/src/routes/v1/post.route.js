@@ -20,6 +20,8 @@ router
   .post(auth(), postController.checkLikeStatus)
   .delete(auth(), validate(postValidation.deletePost), postController.deletePost);
 
+router.route('/views-count/:postId').put(postController.updatePostViews);
+
 router.route('/checklike/:postId').get(auth(), validate(postValidation.getPost), postController.checkLikeStatus);
 
 router

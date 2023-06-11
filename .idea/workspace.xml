@@ -23,7 +23,10 @@
       <change beforePath="$PROJECT_DIR$/BackEnd/src/services/post.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/services/post.service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/validations/post.validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/validations/post.validation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/assets/css/styles.home.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/css/styles.home.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,7 +41,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/BackEnd" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -125,7 +128,7 @@
       <workItem from="1686323702255" duration="6249000" />
       <workItem from="1686382905275" duration="12226000" />
       <workItem from="1686418176635" duration="4842000" />
-      <workItem from="1686467483684" duration="13110000" />
+      <workItem from="1686467483684" duration="24529000" />
     </task>
     <servers />
   </component>
