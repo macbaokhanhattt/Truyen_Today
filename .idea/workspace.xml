@@ -8,6 +8,7 @@
       <change afterPath="$PROJECT_DIR$/BackEnd/src/controllers/like.controller.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/BackEnd/src/models/like.model.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/BackEnd/src/services/like.service.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FrontEnd/assets/css/styles.post.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/config/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/config/config.js" afterDir="false" />
@@ -21,9 +22,10 @@
       <change beforePath="$PROJECT_DIR$/BackEnd/src/services/comment.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/services/comment.service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/services/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/services/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FrontEnd/assets/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/assets/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/css/styles.home.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/FrontEnd/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/post.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/post.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +127,7 @@
       <workItem from="1686323702255" duration="6249000" />
       <workItem from="1686382905275" duration="12226000" />
       <workItem from="1686418176635" duration="4842000" />
-      <workItem from="1686467483684" duration="2350000" />
+      <workItem from="1686467483684" duration="6343000" />
     </task>
     <servers />
   </component>

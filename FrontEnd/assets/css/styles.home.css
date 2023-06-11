@@ -28,7 +28,10 @@ main {
 }
 
 #Home-Page {
-  font-size: 30px;
+  font-size: 27px;
+  margin-left: 100px;
+  white-space: nowrap;
+  font-family: 'serif' ;
 }
 
 button {
@@ -67,11 +70,11 @@ textarea {
 /* lets style the header */
 header {
   background-color: #fff;
-  padding: 16px;
+  padding: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
+  flex-direction: row;
   border-bottom: 1px solid var(--border-color);
   z-index: 1;
   position: sticky;
@@ -424,5 +427,33 @@ header small {
 #news-btn:hover,
 #hot-btn:hover {
   color: red;
+}
+
+#search-form {
+  display: flex;
+  align-items: center;
+  margin-left: 600px;
+
+}
+
+#search-input {
+  padding: 8px;
+  width: 400px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+#search-button {
+  padding: 8px 16px;
+  background-color: #573b8a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#search-button:hover {
+  background-color: #7a62a4;
 }
 

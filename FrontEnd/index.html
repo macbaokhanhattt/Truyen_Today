@@ -13,16 +13,20 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/line-awesome/1.3.0/line-awesome/css/line-awesome.min.css"
       integrity="sha512-vebUliqxrVkBy3gucMhClmyQP9On/HAWQdKDXRaAlb/FKuTbxkjPKUyqVOxAcGwFDka79eTF+YXwfke1h3/wfg=="
       crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="./assets/css/styles.css">
+    <link rel="stylesheet" href="assets/css/styles.home.css">
   </head>
 
   <body>
     <header>
 <!--      <img src="./assets/images/logo.png" alt="">-->
-      <a href="./index.html" id="Home-Page">Truyện Today</a>
+      <a href="./index.html" id="Home-Page">꧁༺Truyện Today༻꧂</a>
+
+      <form id="search-form">
+        <input type="text" id="search-input" placeholder="Nhập từ khóa tìm kiếm">
+        <button type="submit" id="search-button">Tìm kiếm</button>
+      </form>
 <!--      <small>Nơi chia sẻ các câu chuyện thú vị</small>-->
-      <button class="end-page-login" id="end-page-login">Đăng nhập</button>
-      <small id="login-alert">(Có vẻ như bạn chưa đăng nhập , nhấn nút trên để đăng nhập.)</small>
+<!--      <small id="login-alert">(Có vẻ như bạn chưa đăng nhập , nhấn nút trên để đăng nhập.)</small>-->
     </header>
 
     <main>
@@ -38,6 +42,7 @@
       <div id="end-page">
       </div>
       <button class="logout" id="logout">Đăng xuất</button>
+      <button class="end-page-login" id="end-page-login">Đăng nhập</button>
     </main>
 
     <!-- modal for adding a post -->

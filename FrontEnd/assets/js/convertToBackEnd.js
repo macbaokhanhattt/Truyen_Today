@@ -272,10 +272,10 @@ const renderPosts = async (pageNumber) => {
 
     const checkAuth = await checkAuthorize();
     if (checkAuth.code === 401) {
-        logOutBtn.style.visibility = 'hidden';
+        logOutBtn.style.display = 'none';
     }else {
-        endPageLoginBtn.style.visibility = 'hidden';
-        loginAlert.style.visibility= 'hidden';
+        endPageLoginBtn.style.display = 'none';
+        loginAlert.style.display= 'none';
     }
 }
 
