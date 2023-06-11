@@ -37,6 +37,13 @@ const getPost = catchAsync(async (req, res) => {
   res.send(post);
 });
 
+const findPost = catchAsync(async (req, res) => {
+  const filter = { subject: { $regex: req.query.keyword, $options: 'i' } };
+  const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  const posts = await postService.queryPosts(filter, options);
+  res.send(posts);
+});
+
 const getPostByUserId = catchAsync(async (req, res) => {});
 
 const updatePost = catchAsync(async (req, res) => {
@@ -128,4 +135,5 @@ module.exports = {
   decreaseLike,
   checkLikeStatus,
   createLikeTracking,
+  findPost,
 };

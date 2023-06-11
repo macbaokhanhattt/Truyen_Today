@@ -15,6 +15,7 @@ const getPostById = async (id) => {
   return Post.findById(id);
 };
 
+
 const getPostByCategory = async (category) => {
   return Post.find({ category });
 };

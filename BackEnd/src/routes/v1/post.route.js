@@ -11,6 +11,8 @@ router
   .get(validate(postValidation.getPosts), postController.getPosts)
   .post(auth(), validate(postValidation.createPost), postController.createPost);
 
+router.route('/find').get(validate(postValidation.findPost), postController.findPost);
+
 router
   .route('/:postId')
   .get(validate(postValidation.getPost), postController.getPost)

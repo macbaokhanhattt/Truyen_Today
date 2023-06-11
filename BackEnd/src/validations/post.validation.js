@@ -48,10 +48,22 @@ const deletePost = {
   }),
 };
 
+const findPost = {
+  query: Joi.object().keys({
+    keyword: Joi.string(),
+    content: Joi.string(),
+    subject: Joi.string(),
+    sortBy: Joi.string(),
+    limit: Joi.number().integer(),
+    page: Joi.number().integer(),
+  }),
+};
+
 module.exports = {
   createPost,
   getPosts,
   getPost,
   updatePost,
   deletePost,
+  findPost,
 };
