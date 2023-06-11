@@ -28,6 +28,7 @@ const createComment = catchAsync(async (req, res) => {
   await postService.updatePostById(req.body.post_id, {
     comment_count: commentCount,
     interaction_count: interactionCount + 1,
+    interact: interactionCount + 1,
   });
   res.status(httpStatus.CREATED).send(comment);
 });
@@ -82,6 +83,7 @@ const deleteCommentById = catchAsync(async (req, res) => {
   await postService.updatePostById(checkCommentExist.post_id, {
     comment_count: commentCount,
     interaction_count: interactionCount - 1,
+    interact: interactionCount - 1,
   });
   res.status(httpStatus.NO_CONTENT).send();
 });

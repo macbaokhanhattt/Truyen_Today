@@ -8,7 +8,6 @@
       <change afterPath="$PROJECT_DIR$/BackEnd/src/controllers/like.controller.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/BackEnd/src/models/like.model.js" afterDir="false" />
       <change afterPath="$PROJECT_DIR$/BackEnd/src/services/like.service.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources/0a5e0a07-d721-4951-a9a8-57c93214e978.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/0a5e0a07-d721-4951-a9a8-57c93214e978.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/config/config.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/config/config.js" afterDir="false" />
@@ -22,6 +21,9 @@
       <change beforePath="$PROJECT_DIR$/BackEnd/src/services/comment.service.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/services/comment.service.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/services/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/services/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" beforeDir="false" afterPath="$PROJECT_DIR$/BackEnd/src/validations/comment.validation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/assets/css/styles.css" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/css/styles.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/assets/js/convertToBackEnd.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/FrontEnd/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/FrontEnd/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +38,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/BackEnd" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -121,7 +123,9 @@
       <workItem from="1686235932701" duration="4346000" />
       <workItem from="1686321295441" duration="1267000" />
       <workItem from="1686323702255" duration="6249000" />
-      <workItem from="1686382905275" duration="9463000" />
+      <workItem from="1686382905275" duration="12226000" />
+      <workItem from="1686418176635" duration="4842000" />
+      <workItem from="1686467483684" duration="2350000" />
     </task>
     <servers />
   </component>

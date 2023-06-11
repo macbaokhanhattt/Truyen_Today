@@ -13,12 +13,15 @@ const logOutBtn = document.getElementById('logout');
 const endPageElement = document.getElementById('end-page');
 const endPageLoginBtn = document.getElementById('end-page-login');
 const loginAlert = document.getElementById('login-alert');
+const newsBtn = document.getElementById('news-btn');
+const hotNewsBtn = document.getElementById('hot-btn');
 
 // Định nghĩa URL API
 const NewPostApi = `http://localhost:3000/post?sortBy=createdAt:desc&limit=5&page=`
 const AddPostApi = `http://localhost:3000/post`
 const checkAuthApi = `http://localhost:3000/auth/check-auth`
 const getUserApi = `http://localhost:3000/users/`
+const HotPostApi = `http://localhost:3000/post?limit=5&sortBy=interact:desc&page=`
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -56,6 +59,12 @@ const checkAuthorize = async () => {
 
 const getNewsPost = async (page) => {
     const responseApi = await fetch(NewPostApi +page);
+    return responseApi.json();
+
+}
+
+const getHotPost = async (page) => {
+    const responseApi = await fetch(HotPostApi +page);
     return responseApi.json();
 
 }
@@ -143,8 +152,49 @@ const renderPostsByPage = async (pageNumber) => {
     });
 };
 
+const renderHotPostsByPage = async (pageNumber) => {
+    // Xóa các thẻ con trong postsContainer trước khi hiển thị bài đăng mới
+    postsContainer.innerHTML = '';
+
+    // Gọi API hoặc thực hiện truy vấn dữ liệu để lấy các bài đăng của trang pageNumber
+    const data = await getHotPost(pageNumber);
+
+    // Kiểm tra nếu không có bài đăng nào được tìm thấy
+    if (data.results.length === 0) {
+        postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p>Chưa có bài đăng nào!</p>
+      </div>
+    `;
+        return;
+    }
+
+    // Hiển thị các bài đăng của trang pageNumber
+    data.results.forEach((post) => {
+        const postElement = document.createElement('div');
+        postElement.classList.add('post');
+
+        postElement.innerHTML = `<div class="post-votes">
+                </div>
+                <div class="post-content">
+                <h2>
+                <a href="post.html?id=${post.id}">
+                ${post.subject}
+                 </a>
+                   </h2>
+                   <p>Thể loại: ${post.category}</p>
+                   <p>Người đăng: ${post.username}</p>
+                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
+                </div>`;
+
+        postsContainer.appendChild(postElement);
+    });
+};
+
+
 
 const renderPosts = async (pageNumber) => {
+    newsBtn.style.background = '#ffffff';
     let page ;
     if (!pageNumber){
         page =1;
@@ -200,6 +250,90 @@ const renderPosts = async (pageNumber) => {
         button.addEventListener('click', async function() {
             // Xử lý sự kiện khi button được nhấp vào
             renderPostsByPage(i + 1);
+            setActivePageButton(i + 1);
+        });
+    }
+
+    function setActivePageButton(pageNumber) {
+        // Lấy danh sách tất cả các nút page
+        const pageButtons = document.querySelectorAll('.page-button');
+
+        // Xóa lớp active khỏi tất cả các nút page
+        pageButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // Thêm lớp active cho nút page được chọn
+        const activeButton = document.querySelector(`#page-button-${pageNumber}`);
+        activeButton.classList.add('active');
+    }
+
+
+
+    const checkAuth = await checkAuthorize();
+    if (checkAuth.code === 401) {
+        logOutBtn.style.visibility = 'hidden';
+    }else {
+        endPageLoginBtn.style.visibility = 'hidden';
+        loginAlert.style.visibility= 'hidden';
+    }
+}
+
+const renderHotPosts = async () => {
+    postsContainer.innerHTML=``;
+    endPageElement.innerHTML=``;
+
+    hotNewsBtn.style.background = '#ffffff';
+    newsBtn.style.background = 'none';
+    const data = await getHotPost(String(1));
+
+    let post = data.results;
+
+    if (post.length === 0) {
+        postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p>Chưa có truyện nào được đăng tải!!</p>
+      </div>
+    `;
+    } else {
+        post.forEach((post) => {
+            const postElement = document.createElement("div");
+            postElement.classList.add("post");
+
+            postElement.innerHTML = `
+                <div class="post-votes">
+                </div>
+                <div class="post-content">
+                <h2>
+                <a href="post.html?id=${post.id}">
+                ${post.subject}
+                 </a>
+                   </h2>
+                   <p>Thể loại: ${post.category}</p>
+                   <p>Người đăng: ${post.username}</p>
+                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
+                </div>
+                `;
+            postsContainer.appendChild(postElement);
+        });
+    }
+
+    for (let i = 0; i < data.totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.classList.add('page-button');
+        pageButton.textContent = i + 1;
+        pageButton.id = `page-button-${i + 1}`;
+        endPageElement.appendChild(pageButton);
+        setActivePageButton(1);
+
+        // Lấy đối tượng button theo ID
+        const button = document.querySelector(`#page-button-${i + 1}`);
+        let post;
+
+        // Thêm sự kiện "click" cho button
+        button.addEventListener('click', async function() {
+            // Xử lý sự kiện khi button được nhấp vào
+            renderHotPostsByPage(i + 1);
             setActivePageButton(i + 1);
         });
     }
@@ -308,6 +442,17 @@ if (closeAddPostModal) {
 //Thêm Bài đăng
 if (addPostForm) {
     addPostForm.addEventListener("submit", createPost);
+}
+
+if (newsBtn) {
+    newsBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+        window.location.reload();
+    })
+};
+
+if (hotNewsBtn) {
+    hotNewsBtn.addEventListener("click", renderHotPosts);
 }
 
 

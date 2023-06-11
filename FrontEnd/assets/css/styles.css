@@ -373,3 +373,56 @@ header small {
     border-radius: 8px;
   }
 }
+
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  display: none;
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown-menu li {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: block;
+}
+
+#news-btn,
+#hot-btn {
+  display: inline-block;
+  background-color: transparent;
+  font-size: 20px;
+  color: #353536;
+}
+
+#hot-btn {
+  margin-right: 500px;
+}
+
+#news-btn:hover,
+#hot-btn:hover {
+  color: red;
+}
+
