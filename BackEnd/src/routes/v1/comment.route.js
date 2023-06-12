@@ -3,6 +3,7 @@ const auth = require('../../middlewares/auth');
 const validate = require('../../middlewares/validate');
 const commentValidation = require('../../validations/comment.validation');
 const commentController = require('../../controllers/comment.controller');
+const {ro} = require("faker/lib/locales");
 
 const router = express.Router();
 
@@ -17,5 +18,7 @@ router
   .delete(auth(), validate(commentValidation.deleteComment), commentController.deleteCommentById);
 
 router.route('/:postId').get(validate(commentValidation.getCommentByPostId), commentController.getCommentByPostId);
+
+router.route('/getcomment/:commentId').get(validate(commentValidation.getComment), commentController.getCommentById);
 
 module.exports = router;

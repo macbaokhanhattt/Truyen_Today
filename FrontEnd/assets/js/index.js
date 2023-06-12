@@ -19,6 +19,7 @@ const AllPostApi = "http://localhost:3000/post";
 const DeletePostApi = "http://localhost:3000/post/";
 const UpdatePostApi = "http://localhost:3000/post/";
 const GetCommentByPostIdApi ="http://localhost:3000/comment/";
+const GetCommentByIdApi ="http://localhost:3000/comment/getcomment/";
 const CreateCommentApi = "http://localhost:3000/comment/";
 const UpdateCommentApi = "http://localhost:3000/comment/";
 const DeleteCommentApi = "http://localhost:3000/comment/";
@@ -119,6 +120,7 @@ const updatePostViews = async (postId, data) => {
     referrerPolicy: "no-referrer",
     body: JSON.stringify({
       views_count: data.views_count,
+      views: data.views,
     }),
   });
   return responseApi.json();
@@ -142,6 +144,11 @@ const createComment = async (postId, content, auth_token, user_id) => {
       user_id: user_id
     }),
   });
+  return responseApi.json();
+};
+
+const getCommentById = async (commentId) => {
+  const responseApi = await fetch(GetCommentByIdApi+commentId);
   return responseApi.json();
 };
 
@@ -272,8 +279,12 @@ async function renderPostDetail() {
   const urlParams = new URLSearchParams(window.location.search);
   const postId = urlParams.get("id");
   const posts = await getPost(postId);
-  let views = {views_count:posts.views_count +1}
-  console.log(posts.views_count);
+  console.log(posts);
+  let views = {
+    views_count:posts.views_count +1,
+    views: posts.views_count+ 1,
+  }
+
   await updatePostViews(postId, views);
 
   const checkAuth = await checkAuthorize();
@@ -516,6 +527,7 @@ async function handleUpdateComment(event) {
   event.preventDefault();
   const button = event.target;
   const commentId = button.getAttribute("data-comment-id");
+  const dataComment = await getCommentById(commentId);
 
   const commentElement = button.closest(".comment");
   const commentForm = commentElement.querySelector(".update-comment-form");
@@ -531,6 +543,10 @@ async function handleUpdateComment(event) {
     <button type="submit">Chỉnh sửa</button>
   `;
 
+    const commentTextarea = commentForm.querySelector(".update-comment-textarea");
+    commentTextarea.value = dataComment.content;
+
+
     // set the data-parent-id attribute of the form to the parentCommentId
     commentForm.addEventListener("submit",  async (event) => {
       event.preventDefault();
@@ -538,18 +554,24 @@ async function handleUpdateComment(event) {
       const commentTextarea = form.querySelector(".update-comment-textarea");
       const commentContent = commentTextarea.value;
       const accessTokens = localStorage.getItem("access-token");
+      const checkAuth = await checkAuthorize();
 
-      // add the new comment with the parentCommentId and commentContent
-      const confirmUpdateComment = confirm('Bạn có chắc muốn thay đổi bình luận này không????');
-      if (confirmUpdateComment) {
-        await updateComment(commentId, commentContent, accessTokens );
-        window.location.reload();
+      if (checkAuth.code === 401) {
+        alert('Có vẻ như bạn chưa đăng nhập \nVui lòng đăng nhập để có thể sử dụng chức năng này');
+        window.location.assign('/Truyen_Today/FrontEnd/sign-up-login-form/dist/index.html');
+      }else {
+        // add the new comment with the parentCommentId and commentContent
+        const confirmUpdateComment = confirm('Bạn có chắc muốn thay đổi bình luận này không????');
+        if (confirmUpdateComment) {
+          await updateComment(commentId, commentContent, accessTokens );
+          window.location.reload();
+        }
+
+
+        // clear the textarea and hide the comment form
+        commentTextarea.value = "";
+        form.style.display = "none";
       }
-
-
-      // clear the textarea and hide the comment form
-      commentTextarea.value = "";
-      form.style.display = "none";
     } );
     commentElement.appendChild(commentForm);
     commentForm.style.display = "flex";

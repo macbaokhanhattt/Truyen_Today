@@ -15,7 +15,7 @@ const getCommentByUserId = async (userId) => {
   return Comment.findById(userId);
 };
 
-const getCommentById = async (commentId) =>{
+const getCommentById = async (commentId) => {
   return Comment.findById(commentId);
 };
 

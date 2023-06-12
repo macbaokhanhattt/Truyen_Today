@@ -14,18 +14,20 @@ const endPageElement = document.getElementById('end-page');
 const endPageLoginBtn = document.getElementById('end-page-login');
 const newsBtn = document.getElementById('news-btn');
 const hotNewsBtn = document.getElementById('hot-btn');
+const mostViewsBtn =document.getElementById('most-views-btn');
 const searchInput = document.getElementById('search-input');
 const searchBtn = document.getElementById('search-button');
 const searchForm = document.getElementById('search-form');
 const personalPageBtn = document.getElementById('personal-page-btn');
 
 // Định nghĩa URL API
-const NewPostApi = `http://localhost:3000/post?sortBy=createdAt:desc&limit=5&page=`
-const AddPostApi = `http://localhost:3000/post`
-const checkAuthApi = `http://localhost:3000/auth/check-auth`
-const getUserApi = `http://localhost:3000/users/`
-const HotPostApi = `http://localhost:3000/post?limit=5&sortBy=interact:desc&page=`
-const FindPostApi = `http://localhost:3000/post/find?limit=3&keyword=`
+const NewPostApi = `http://localhost:3000/post?sortBy=createdAt:desc&limit=5&page=`;
+const AddPostApi = `http://localhost:3000/post`;
+const checkAuthApi = `http://localhost:3000/auth/check-auth`;
+const getUserApi = `http://localhost:3000/users/`;
+const HotPostApi = `http://localhost:3000/post?limit=5&sortBy=interact:desc&page=`;
+const MostViewsPostApi = `http://localhost:3000/post?limit=5&sortBy=views:desc&page=`;
+const FindPostApi = `http://localhost:3000/post/find?limit=3&keyword=`;
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -71,6 +73,11 @@ const getHotPost = async (page) => {
     const responseApi = await fetch(HotPostApi +page);
     return responseApi.json();
 
+}
+
+const getMostViewsPost = async (page) => {
+    const responseApi = await fetch(MostViewsPostApi+page);
+    return responseApi.json();
 }
 
 const AddPost = async (data) => {
@@ -151,9 +158,9 @@ const renderPostsByPage = async (pageNumber) => {
                 ${post.subject}
                  </a>
                    </h2>
-                   <p>Thể loại: ${post.category}</p>
-                   <p>Người đăng: ${post.username}</p>
-                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
                 </div>`;
 
         postsContainer.appendChild(postElement);
@@ -195,9 +202,9 @@ const renderHotPostsByPage = async (pageNumber) => {
                 ${post.subject}
                  </a>
                    </h2>
-                   <p>Thể loại: ${post.category}</p>
-                   <p>Người đăng: ${post.username}</p>
-                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
                 </div>`;
 
         postsContainer.appendChild(postElement);
@@ -238,15 +245,58 @@ const renderFoundedPostsByPage = async (keyword ,pageNumber) => {
                 ${post.subject}
                  </a>
                    </h2>
-                   <p>Thể loại: ${post.category}</p>
-                   <p>Người đăng: ${post.username}</p>
-                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
                 </div>`;
 
         postsContainer.appendChild(postElement);
     });
 };
 
+const renderMostViewsPostsByPage = async (pageNumber) => {
+    // Xóa các thẻ con trong postsContainer trước khi hiển thị bài đăng mới
+    postsContainer.innerHTML = '';
+
+    // Gọi API hoặc thực hiện truy vấn dữ liệu để lấy các bài đăng của trang pageNumber
+    const data = await getMostViewsPost(pageNumber);
+
+    // Kiểm tra nếu không có bài đăng nào được tìm thấy
+    if (data.results.length === 0) {
+        postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p>Chưa có bài đăng nào!</p>
+      </div>
+    `;
+        return;
+    }
+    postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p style="font-weight: bold; font-size: larger">🔥🔥Nhiều lượt đọc nhất🔥🔥</p> 
+      </div>
+    `;
+
+    // Hiển thị các bài đăng của trang pageNumber
+    data.results.forEach((post) => {
+        const postElement = document.createElement('div');
+        postElement.classList.add('post');
+
+        postElement.innerHTML = `<div class="post-votes">
+                </div>
+                <div class="post-content">
+                <h2>
+                <a href="post.html?id=${post.id}">
+                ${post.subject}
+                 </a>
+                   </h2>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
+                </div>`;
+
+        postsContainer.appendChild(postElement);
+    });
+};
 
 const renderPosts = async (pageNumber) => {
     newsBtn.style.background = '#ffffff';
@@ -280,9 +330,9 @@ const renderPosts = async (pageNumber) => {
                 ${post.subject}
                  </a>
                    </h2>
-                   <p>Thể loại: ${post.category}</p>
-                   <p>Người đăng: ${post.username}</p>
-                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
                 </div>
                 `;
             postsContainer.appendChild(postElement);
@@ -339,6 +389,7 @@ const renderHotPosts = async () => {
     postsContainer.innerHTML=``;
     endPageElement.innerHTML=``;
 
+    mostViewsBtn.style.background = 'none';
     hotNewsBtn.style.background = '#ffffff';
     newsBtn.style.background = 'none';
     const data = await getHotPost(String(1));
@@ -370,9 +421,9 @@ const renderHotPosts = async () => {
                 ${post.subject}
                  </a>
                    </h2>
-                   <p>Thể loại: ${post.category}</p>
-                   <p>Người đăng: ${post.username}</p>
-                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
                 </div>
                 `;
             postsContainer.appendChild(postElement);
@@ -424,6 +475,7 @@ const renderHotPosts = async () => {
 }
 //Đây
 const renderPostsFounded = async () => {
+    mostViewsBtn.style.background = 'none';
     newsBtn.style.background = 'none';
     hotNewsBtn.style.background= 'none';
     postsContainer.innerHTML=``;
@@ -461,9 +513,9 @@ const renderPostsFounded = async () => {
                 ${post.subject}
                  </a>
                    </h2>
-                   <p>Thể loại: ${post.category}</p>
-                   <p>Người đăng: ${post.username}</p>
-                   <p>Lượt thích: ${post.like_count} Comment: ${post.comment_count}</p>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
                 </div>
                 `;
             postsContainer.appendChild(postElement);
@@ -486,6 +538,96 @@ const renderPostsFounded = async () => {
         button.addEventListener('click', async function() {
             // Xử lý sự kiện khi button được nhấp vào
             renderFoundedPostsByPage(keyword,i + 1);
+            setActivePageButton(i + 1);
+        });
+    }
+
+    function setActivePageButton(pageNumber) {
+        // Lấy danh sách tất cả các nút page
+        const pageButtons = document.querySelectorAll('.page-button');
+
+        // Xóa lớp active khỏi tất cả các nút page
+        pageButtons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // Thêm lớp active cho nút page được chọn
+        const activeButton = document.querySelector(`#page-button-${pageNumber}`);
+        activeButton.classList.add('active');
+    }
+
+
+
+    const checkAuth = await checkAuthorize();
+    if (checkAuth.code === 401) {
+        logOutBtn.style.display = 'none';
+    }else {
+        endPageLoginBtn.style.display = 'none';
+    }
+}
+
+const renderMostViewsPost = async () => {
+    newsBtn.style.background = 'none';
+    hotNewsBtn.style.background= 'none';
+    mostViewsBtn.style.background = '#ffffff';
+    postsContainer.innerHTML=``;
+    endPageElement.innerHTML=``;
+    const data = await getMostViewsPost(String(1));
+
+    let post = data.results;
+
+
+    if (data.totalPages === 0) {
+        console.log('hehe')
+        postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p>🔥🔥Nhiều lượt đọc nhất🔥🔥</p>
+      </div>
+    `;
+    } else {
+        postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p style="font-weight: bold; font-size: larger;">🔥🔥Nhiều lượt đọc nhất🔥🔥</p> 
+      </div>
+    `;
+        post.forEach((post) => {
+            const postElement = document.createElement("div");
+            postElement.classList.add("post");
+
+            postElement.innerHTML = `
+                <div class="post-votes">
+                </div>
+                <div class="post-content">
+                <h2>
+                <a href="post.html?id=${post.id}">
+                ${post.subject}
+                 </a>
+                   </h2>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
+                </div>
+                `;
+            postsContainer.appendChild(postElement);
+        });
+    }
+
+    for (let i = 0; i < data.totalPages; i++) {
+        const pageButton = document.createElement('button');
+        pageButton.classList.add('page-button');
+        pageButton.textContent = i + 1;
+        pageButton.id = `page-button-${i + 1}`;
+        endPageElement.appendChild(pageButton);
+        setActivePageButton(1);
+
+        // Lấy đối tượng button theo ID
+        const button = document.querySelector(`#page-button-${i + 1}`);
+        let post;
+
+        // Thêm sự kiện "click" cho button
+        button.addEventListener('click', async function() {
+            // Xử lý sự kiện khi button được nhấp vào
+            renderMostViewsPostsByPage(i + 1);
             setActivePageButton(i + 1);
         });
     }
@@ -604,6 +746,10 @@ if (newsBtn) {
 
 if (hotNewsBtn) {
     hotNewsBtn.addEventListener("click", renderHotPosts);
+}
+
+if (mostViewsBtn) {
+    mostViewsBtn.addEventListener("click", renderMostViewsPost);
 }
 
 if (searchForm) {

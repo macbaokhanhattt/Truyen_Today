@@ -106,6 +106,11 @@ const deleteCommentByPostId = catchAsync(async (req, res) => {
   res.status(httpStatus.NO_CONTENT).send();
 });
 
+const getCommentById = catchAsync(async (req, res) => {
+  const comment = await commentService.getCommentById(req.params.commentId);
+  res.send(comment);
+});
+
 module.exports = {
   createComment,
   getCommentByUserId,
@@ -113,4 +118,5 @@ module.exports = {
   updateCommentById,
   deleteCommentByPostId,
   deleteCommentById,
+  getCommentById,
 };
