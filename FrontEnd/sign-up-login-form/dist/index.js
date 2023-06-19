@@ -7,6 +7,7 @@ const emailLoginElement = document.getElementById('email-login');
 const passwordLoginElement = document.getElementById('pswd-login');
 const logInBtnElement = document.getElementById('log-in-btn');
 
+
 // Định nghĩa URL API
 const signUpApi = `http://localhost:3000/auth/register`;
 const logInApi = `http://localhost:3000/auth/login`;
@@ -64,6 +65,9 @@ const logIn = async () => {
     return result;
 };
 
+////////////////////////////////////////////////
+
+
 // Đăng ký
 const signUp = async () => {
     const result = await register();
@@ -99,3 +103,4 @@ logInBtnElement.addEventListener("click", (event) => {
     event.preventDefault();
     signIn();
 });
+

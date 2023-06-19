@@ -83,8 +83,25 @@ button:hover{
 	transform: translateY(-500px);
 }
 #chk:checked ~ .login label{
-	transform: scale(1);	
+	transform: scale(1);
 }
 #chk:checked ~ .signup label{
 	transform: scale(.6);
 }
+
+.forgot-pass-container {
+	display: flex;
+	justify-content:center ;
+}
+
+#confirm-code-form {
+	display: none;
+	justify-content: center;
+}
+
+/*#send-code-form {*/
+/*	display: none;*/
+/*}*/
+
+
+

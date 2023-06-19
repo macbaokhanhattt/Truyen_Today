@@ -23,7 +23,7 @@ const createPost = catchAsync(async (req, res) => {
 });
 
 const getPosts = catchAsync(async (req, res) => {
-  const filter = pick(req.query, ['category']);
+  const filter = pick(req.query, ['category', 'user_id']);
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
   const result = await postService.queryPosts(filter, options);
   res.send(result);
@@ -38,8 +38,11 @@ const getPost = catchAsync(async (req, res) => {
 });
 
 const findPost = catchAsync(async (req, res) => {
-  const filter = { subject: { $regex: req.query.keyword, $options: 'i' } };
+  let filter = { subject: { $regex: req.query.keyword, $options: 'i' } };
   const options = pick(req.query, ['sortBy', 'limit', 'page']);
+  if (req.query.category) {
+    filter = { category: req.query.category, subject: { $regex: req.query.keyword, $options: 'i' } };
+  }
   const posts = await postService.queryPosts(filter, options);
   res.send(posts);
 });

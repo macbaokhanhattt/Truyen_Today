@@ -1,6 +1,7 @@
 // Lấy các phần tử DOM
 const bodyElement = document.querySelector('body');
 const postsContainer = document.getElementById("posts-container");
+const postsHeader = document.querySelector('.posts-header');
 const addPostModal = document.getElementById("add-post-modal");
 const showAddPostModal = document.getElementById("show-add-post-modal-btn");
 const closeAddPostModal = document.getElementById("close-modal-btn");
@@ -19,6 +20,11 @@ const searchInput = document.getElementById('search-input');
 const searchBtn = document.getElementById('search-button');
 const searchForm = document.getElementById('search-form');
 const personalPageBtn = document.getElementById('personal-page-btn');
+const categoryBtn = document.getElementById('category-btn');
+const categoryFilterBtn = document.getElementById('category-filter-btn');
+const category = document.getElementById('category');
+
+
 
 // Định nghĩa URL API
 const NewPostApi = `http://localhost:3000/post?sortBy=createdAt:desc&limit=5&page=`;
@@ -104,8 +110,12 @@ const AddPost = async (data) => {
 };
 
 const findPost = async (keyword, page) => {
-    console.log(FindPostApi+keyword+`&page=${page}`)
     const responseApi = await fetch(FindPostApi+keyword+`&page=${page}`);
+    return responseApi.json();
+}
+
+const getNewsPostByUserId = async (userId) => {
+    const responseApi = await fetch(`http://localhost:3000/post?user_id=${userId}&sortBy=createdAt:desc`);
     return responseApi.json();
 }
 
@@ -566,6 +576,7 @@ const renderPostsFounded = async () => {
     }
 }
 
+
 const renderMostViewsPost = async () => {
     newsBtn.style.background = 'none';
     hotNewsBtn.style.background= 'none';
@@ -656,13 +667,66 @@ const renderMostViewsPost = async () => {
     }
 }
 
+async function renderPersonalPage(event) {
+    event.preventDefault();
+    newsBtn.style.background = 'none';
+    hotNewsBtn.style.background= 'none';
+    mostViewsBtn.style.background = '#ffffff';
+    postsContainer.innerHTML=``;
+    endPageElement.innerHTML=``;
+    postsHeader.style.visibility = 'hidden';
+    const userId = localStorage.getItem('user_id');
+    const data = await getNewsPostByUserId(String(userId));
+    console.log(data);
+
+    let post = data.results;
+
+    if (data.totalPages === 0) {
+        console.log('hehe')
+        postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p>Bạn chưa đăng bài nào</p>
+      </div>
+    `;
+    } else {
+        postsContainer.innerHTML = `
+      <div class="no-posts">
+        <p style="font-weight: bold; font-size: larger;">Truyện của bạn</p> 
+      </div>
+    `;
+        post.forEach((post) => {
+            const postElement = document.createElement("div");
+            postElement.classList.add("post");
+
+            postElement.innerHTML = `
+                <div class="post-votes">
+                </div>
+                <div class="post-content">
+                <h2>
+                <a href="post.html?id=${post.id}">
+                ${post.subject}
+                 </a>
+                   </h2>
+                   <p><b>Thể loại:</b> ${post.category}</p>
+                   <p><b>Người đăng:</b> ${post.username}</p>
+                   <p><b>Lượt thích:</b> ${post.like_count} <b>Comment:</b> ${post.comment_count} <b>Lượt đọc:</b> ${post.views}</p>
+                </div>
+                `;
+            postsContainer.appendChild(postElement);
+        });
+    }
+
+}
+
+
+
 async function createPost(event) {
     // we are going to use preventDefault to prevent the default behaviour of a form which is to submit the data to a URL and reload the page, instead we want to execute custom JavaScript code without causing the page to reload
     event.preventDefault();
 
     const title = document.getElementById("title").value;
     const content = document.getElementById("content").value;
-    const category = document.getElementById('category').value;
+    const category = document.getElementById('category').innerHTML;
 
     if (title && content) {
         // add the post to the beginning of the posts array
@@ -701,10 +765,101 @@ const start = () => {
     renderPosts();
 }
 
+/////////////////////////////Category////////////////////////////////////////
+const genres = [
+    'Tiểu thuyết',
+    'Truyện ngắn',
+    'Truyện dài',
+    'Truyện tranh',
+    'Kinh dị',
+    'Phiêu lưu',
+    'Hài hước',
+    'Tình cảm',
+    'Khoa học viễn tưởng',
+    'Lịch sử',
+    'Học đường',
+    'Văn học cổ điển',
+    'Văn học hiện đại',
+    'Trinh thám',
+    'Văn học nước ngoài',
+    'Cổ tích',
+    'Viễn tưởng',
+    'Kịch',
+    'Hành động',
+    'Bí ẩn',
+    'Tâm lý',
+    'Công nghệ',
+    'Lãng mạn',
+    'Văn học Việt Nam',
+    'Tự truyện',
+    'Suy ngẫm',
+    'Đời sống',
+    'Huyền bí',
+    'Tưởng tượng',
+    'Tài liệu',
+    'Thể thao',
+    'Kinh tế',
+    'Chính trị',
+    'Tôn giáo',
+    'Sức khỏe',
+    'Manga',
+    'Light Novel',
+    'Đam mỹ',
+    'Lịch sử hư cấu',
+    'Du ký',
+    'Xuyên không',
+    'Harem',
+    'Trọng sinh',
+    'Ngôn tình',
+    'Cổ điển Trung Quốc',
+    'Ngôn tình sắc',
+    'Điện ảnh',
+    'Âm nhạc',
+    'Thiếu nhi',
+    'Kỳ ảo',
+    'Ngôn tình hiện đại',
+    'Khác'
+];
+
+function toggleDropdown() {
+    const dropdownContent = document.getElementById('dropdown-content');
+    dropdownContent.classList.toggle('show');
+    genres.forEach(function(genre) {
+        const option = document.createElement('a');
+        option.href = '#';
+        option.textContent = genre;
+        dropdownContent.appendChild(option);
+        option.addEventListener("click", () => {
+            category.innerHTML= genre;
+        })
+    });
+}
+
+function toggleDropdownFilter() {
+    const dropdownContent = document.getElementById('dropdown-content-filter');
+    dropdownContent.classList.toggle('show');
+    genres.forEach(function(genre) {
+        const option = document.createElement('a');
+        option.href = '#';
+        option.textContent = genre;
+        dropdownContent.appendChild(option);
+        option.addEventListener("click", () => {
+            category.innerHTML= genre;
+        })
+    });
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////
 
 // we will wrap these event listeners in if statements because the elements won't be present on the post detail page and if we don't check for them the app would crash
+if (categoryFilterBtn) {
+    categoryFilterBtn.addEventListener("mouseover", toggleDropdownFilter);
+}
+
+if (categoryBtn) {
+    categoryBtn.addEventListener("mouseover", toggleDropdown);
+}
 
 logOutBtn.addEventListener("click", () => {
     localStorage.removeItem('access-token');
@@ -742,7 +897,7 @@ if (newsBtn) {
         event.preventDefault();
         window.location.reload();
     })
-};
+}
 
 if (hotNewsBtn) {
     hotNewsBtn.addEventListener("click", renderHotPosts);
@@ -752,11 +907,15 @@ if (mostViewsBtn) {
     mostViewsBtn.addEventListener("click", renderMostViewsPost);
 }
 
-if (searchForm) {
-    searchForm.addEventListener("submit", (event) => {
+if (searchBtn) {
+    searchBtn.addEventListener("click", (event) => {
         event.preventDefault();
         renderPostsFounded();
     });
+}
+
+if (personalPageBtn) {
+    personalPageBtn.addEventListener("click", renderPersonalPage)
 }
 
 

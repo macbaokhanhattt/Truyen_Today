@@ -51,15 +51,22 @@
         </button>
         <form id="add-post-form">
           <div class="form-group">
-            <label for="title">Tiêu đề</label>
+            <label for="title">Tiêu đề:</label>
             <input type="text" id="title" required>
           </div>
           <div class="form-group">
-            <label for="category">Thể loại</label>
-            <input type="text" id="category" required>
+            <label for="category-btn">Thể loại:</label>
+            <p id="category"></p>
+            <div class="dropdown">
+              <button class="dropdown-button" id="category-btn">Lựa chọn</button>
+              <div class="dropdown-content" id="dropdown-content">
+                <!-- Các lựa chọn sẽ được thêm tự động bằng JavaScript -->
+              </div>
+            </div>
+
           </div>
           <div class="form-group">
-            <label for="content">Nội dung</label>
+            <label for="content">Nội dung:</label>
             <textarea id="content" rows="10" required></textarea>
           </div>
           <button type="submit">Chỉnh sửa</button>

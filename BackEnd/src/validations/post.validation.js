@@ -16,6 +16,7 @@ const getPosts = {
   query: Joi.object().keys({
     content: Joi.string(),
     subject: Joi.string(),
+    user_id: Joi.custom(objectId),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),
@@ -53,6 +54,7 @@ const findPost = {
     keyword: Joi.string(),
     content: Joi.string(),
     subject: Joi.string(),
+    category: Joi.string(),
     sortBy: Joi.string(),
     limit: Joi.number().integer(),
     page: Joi.number().integer(),

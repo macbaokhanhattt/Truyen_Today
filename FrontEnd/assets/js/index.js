@@ -11,6 +11,8 @@ const deletePostBtn = document.getElementById("delete-post-btn");
 const updatePostBtn = document.getElementById("update-post-btn");
 const likePostBtn = document.getElementById("like-post-btn");
 const unlikePostBtn = document.getElementById("unlike-post-btn");
+const categoryBtn = document.getElementById('category-btn');
+const category = document.getElementById('category');
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -351,7 +353,7 @@ const handleUpdatePost = async (event) => {
   const accessTokens = localStorage.getItem("access-token");
   const title = document.getElementById("title").value;
   const content = document.getElementById("content").value;
-  const category = document.getElementById("category").value;
+  const category = document.getElementById("category").innerHTML;
   const data = {
     title: title,
     content: content,
@@ -383,6 +385,7 @@ const handleUnLikePost = async (event) => {
 }
 
 // now let's add commenting functionality
+
 if (addCommentForm) {
   addCommentForm.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -420,6 +423,85 @@ if (likePostBtn) {
 if (unlikePostBtn) {
   unlikePostBtn.addEventListener("click", handleUnLikePost)
 }
+
+if (categoryBtn) {
+  categoryBtn.addEventListener("mouseover", toggleDropdown);
+}
+
+/////////////////////////////Category////////////////////////////////////////
+const genres = [
+  'Tiểu thuyết',
+  'Truyện ngắn',
+  'Truyện dài',
+  'Truyện tranh',
+  'Kinh dị',
+  'Phiêu lưu',
+  'Hài hước',
+  'Tình cảm',
+  'Khoa học viễn tưởng',
+  'Lịch sử',
+  'Học đường',
+  'Văn học cổ điển',
+  'Văn học hiện đại',
+  'Trinh thám',
+  'Văn học nước ngoài',
+  'Cổ tích',
+  'Viễn tưởng',
+  'Kịch',
+  'Hành động',
+  'Bí ẩn',
+  'Tâm lý',
+  'Công nghệ',
+  'Lãng mạn',
+  'Văn học Việt Nam',
+  'Tự truyện',
+  'Suy ngẫm',
+  'Đời sống',
+  'Huyền bí',
+  'Tưởng tượng',
+  'Tài liệu',
+  'Thể thao',
+  'Kinh tế',
+  'Chính trị',
+  'Tôn giáo',
+  'Sức khỏe',
+  'Manga',
+  'Light Novel',
+  'Đam mỹ',
+  'Lịch sử hư cấu',
+  'Du ký',
+  'Xuyên không',
+  'Harem',
+  'Trọng sinh',
+  'Ngôn tình',
+  'Cổ điển Trung Quốc',
+  'Ngôn tình sắc',
+  'Điện ảnh',
+  'Âm nhạc',
+  'Thiếu nhi',
+  'Kỳ ảo',
+  'Ngôn tình hiện đại',
+  'Khác'
+];
+
+function toggleDropdown() {
+  const dropdownContent = document.getElementById('dropdown-content');
+  dropdownContent.classList.toggle('show');
+  genres.forEach(function(genre) {
+    const option = document.createElement('a');
+    option.href = '#';
+    option.textContent = genre;
+    dropdownContent.appendChild(option);
+    option.addEventListener("click", () => {
+      category.innerHTML= genre;
+    })
+  });
+}
+
+
+
+
+
 /////////////////////////////////////////////////////////////////
 async function showUpdateForm(event) {
   event.preventDefault();
@@ -430,7 +512,7 @@ async function showUpdateForm(event) {
 
   const title = (document.getElementById("title").value = post.subject);
   const content = (document.getElementById("content").value = post.content);
-  const category = (document.getElementById("category").value = post.category);
+  const category = (document.getElementById("category").innerHTML = post.category);
 
   updatePostModal.style.display = "flex";
   // prevent the posts page from scrolling when scrolling inside the posts modal
@@ -594,6 +676,7 @@ async function handleDeleteComment(event) {
     window.location.reload();
   }
 }
+
 
 // render the post detail and comments if a post is specified in the URL, otherwise, render all posts
   renderPostDetail();
