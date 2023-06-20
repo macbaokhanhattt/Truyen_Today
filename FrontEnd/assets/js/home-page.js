@@ -110,8 +110,16 @@ const AddPost = async (data) => {
 };
 
 const findPost = async (keyword, page) => {
-    const responseApi = await fetch(FindPostApi+keyword+`&page=${page}`);
-    return responseApi.json();
+    if (categoryFilterBtn.innerHTML !== 'Thể Loại' && keyword) {
+        const responseApi = await fetch(FindPostApi+keyword+`&page=${page}&category=${categoryFilterBtn.innerHTML}`);
+        return responseApi.json();
+    } else if (categoryFilterBtn.innerHTML === 'Thể Loại' && keyword) {
+        const responseApi = await fetch(FindPostApi+keyword+`&page=${page}`);
+        return responseApi.json();
+    } else if (!keyword) {
+        const responseApi = await fetch(NewPostApi +`${page}&category=${categoryFilterBtn.innerHTML}`);
+        return responseApi.json();
+    }
 }
 
 const getNewsPostByUserId = async (userId) => {
@@ -844,7 +852,7 @@ function toggleDropdownFilter() {
         option.textContent = genre;
         dropdownContent.appendChild(option);
         option.addEventListener("click", () => {
-            category.innerHTML= genre;
+            categoryFilterBtn.innerHTML= genre;
         })
     });
 }
@@ -917,6 +925,8 @@ if (searchBtn) {
 if (personalPageBtn) {
     personalPageBtn.addEventListener("click", renderPersonalPage)
 }
+
+
 
 
 start();

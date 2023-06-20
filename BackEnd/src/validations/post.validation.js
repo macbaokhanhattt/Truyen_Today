@@ -14,6 +14,7 @@ const createPost = {
 
 const getPosts = {
   query: Joi.object().keys({
+    category: Joi.string(),
     content: Joi.string(),
     subject: Joi.string(),
     user_id: Joi.custom(objectId),
